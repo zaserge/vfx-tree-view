@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <style>
+        .info {
+            display: inline-block;
+            margin-left: 20px;   
+            color: silver;
+        }
+    </style>
 </head>
 <body>
 
@@ -8,10 +15,27 @@
     <?php
         $configData = yaml_parse_file(__DIR__ . '/config.yaml');
 
-        $order = $_GET['name'] ?? 'vendor';
+        $order = $_GET['order'] ?? 'vendor';
         switch ($order) {
             case 'scene':
-                walkByScenes($configData);
+                $list = walkByScenes($configData);
+
+                echo "<ul>";
+                ksort($list, SORT_STRING | SORT_FLAG_CASE);
+                foreach ($list as $scene => $data) {
+                    echo "\n<li>", $scene;
+                    echo "<ul>"; 
+                    ksort($data, SORT_STRING | SORT_FLAG_CASE);
+                    foreach ($data as $shot) {
+                        echo "<li>", $shot['shot'];
+                        echo "<div class=info>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</div>";
+                        echo "</li>";
+                    }
+                    echo "</ul>";    
+                    echo "</li>\n";              
+                }
+                echo "</ul>";
+
                 break;
             case 'date':
                 walkByDates($configData);
@@ -80,7 +104,7 @@
                     }
                 }
             }
-            print_r($shotList);
+            return ($shotList);
         }
 
         function walkByScenes($configData)
@@ -99,33 +123,35 @@
                         foreach (scandir($datePath) as $item) {
                             if (!str_starts_with($item, ".") ) {
                                 if (preg_match($reValid, $item, $matches)) {
+                                    $matches['scene'] = strtoupper($matches['scene']);
                                     if (!isset($shotList[$matches['scene']]))
                                         $shotList[$matches['scene']] = [];
-                                    array_push($shotList[$matches['scene']], 
+                                    $shotList[$matches['scene']][$item] =  
                                                 [ "shot" => $item, 
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "WARN"
-                                                ]);
+                                                ];
                                 }
                                 elseif (preg_match($reWarn, $item, $matches)) {
+                                    $matches['scene'] = strtoupper($matches['scene']);
                                     if (!isset($shotList[$matches['scene']]))
                                         $shotList[$matches['scene']] = [];
-                                    array_push($shotList[$matches['scene']], 
+                                        $shotList[$matches['scene']][$item] =
                                                 [ "shot" => $item, 
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "WARN"
-                                                ]);
+                                                ];
                                 }
                             }
                         }
                     }
                 }
             }
-            print_r($shotList);
+            return ($shotList);
         }   
         
         function walkByDates($configData)
