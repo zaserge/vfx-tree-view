@@ -1,0 +1,11 @@
+.warn {
+	color: "yellow";
+}
+
+.valid {
+	color: "green";
+}
+
+.misformat {
+	color: "red";
+}
