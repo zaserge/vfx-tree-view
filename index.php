@@ -2,10 +2,31 @@
 <html>
 <head>
     <style>
+        body {
+            padding-left: 100px;
+            width: 700px;
+        }
         .info {
             display: inline-block;
             margin-left: 20px;   
             color: silver;
+            font-style: italic;
+        }
+        .listscenes {
+            font-weight: bold;
+            font-size: larger;
+        }
+        .listshots {
+            font-family: monospace;
+            font-weight: normal;
+            font-size: smaller;
+        }
+        .active, .collapsible:hover {
+            background-color: #DDD;
+        }
+        .content {
+            display: none;
+            background-color: #EEE;
         }
     </style>
 </head>
@@ -20,19 +41,23 @@
             case 'scene':
                 $list = walkByScenes($configData);
 
-                echo "<ul>";
+                echo "<ul class='listscenes'>";
                 ksort($list, SORT_STRING | SORT_FLAG_CASE);
                 foreach ($list as $scene => $data) {
-                    echo "\n<li>", $scene;
-                    echo "<ul>"; 
+                    echo "\n<li class='collapsible'>", $scene;
+
+                    echo "<div class='content'>";
+                    echo "<ul class='listshots'>"; 
                     ksort($data, SORT_STRING | SORT_FLAG_CASE);
                     foreach ($data as $shot) {
                         echo "<li>", $shot['shot'];
-                        echo "<div class=info>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</div>";
+                        echo "<div class='info'>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</div>";
                         echo "</li>";
-                    }
+                    }                    
                     echo "</ul>";    
-                    echo "</li>\n";              
+
+                    echo "</div>";
+                    echo "</li>";              
                 }
                 echo "</ul>";
 
@@ -204,16 +229,16 @@
         var i;
 
         for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
+            coll[i].addEventListener("click", function() {
                 this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                if (content.style.maxHeight){
-                    content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
+                var content = this.getElementsByClassName("content")[0];
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
             } 
-        });
-        }
     </script>
 
 </body>
