@@ -80,6 +80,7 @@
             padding: 20px;  
             font-size: 1em; 
             color: silver;
+            display: none;
         }
     </style>
 </head>
@@ -107,7 +108,7 @@
                         echo "<div class='infotext'>";
                         echo "<p>Vendor: ", explode("/", $shot['vendor'])[0], "</p>";
                         echo "<p>Date: ", $shot['date'], "</p>";
-                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'] . '/' . $shot['date'], "</p>";
                         echo "</div>";
                         echo "</span>";
                         echo "<span class='info'>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</span>";
@@ -138,7 +139,7 @@
                         echo "<div class='infotext'>";
                         echo "<p>Vendor: ", explode("/", $shot['vendor'])[0], "</p>";
                         echo "<p>Date: ", $shot['date'], "</p>";
-                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'] . '/' . $shot['date'], "</p>";
                         echo "</div>";
                         echo "</span>";
                         echo "<span class='info'>", explode("/", $shot['vendor'])[0], "</span>";
