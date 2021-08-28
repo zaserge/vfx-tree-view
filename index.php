@@ -6,20 +6,22 @@
             margin-left: 100px;
             width: 700px;
         }
-        .info {
-            display: inline-block;
-            margin-left: 20px;   
-            color: silver;
-            font-style: italic;
+        ul {
+            font-family: sans-serif;         
         }
         .listscenes {
             font-weight: bold;
-            font-size: 1.5em;
+            font-size: 1.2em;
             list-style-image: url(images/clapperboard.png);
+        }         
+        .listdates {
+            font-weight: bold;
+            font-size: 1.2em;
+            list-style-image: url(images/calendar.png);
         } 
-        
         .toggleitem {
             cursor: pointer;
+            padding: 5px;
         }
         .listshots {
             font-family: monospace;
@@ -31,6 +33,13 @@
         .active, .toggleitem:hover {
             background-color: #DDD;
         }
+        .shotname {
+            padding: 3px;
+            cursor: pointer;
+        }
+        .shotname:hover {
+            background-color: #DDD;
+        }
         .content {
             display: none;
             background-color: #EEE;
@@ -38,7 +47,6 @@
         .count {
             font-size: 0.6em;
             font-weight: normal;
-            display: inline-block;
             margin-left: 3em;
         }
         .valid::marker {
@@ -53,11 +61,27 @@
             color: red;
             font-size: 1.5em;
         }
+        .shotname .infotext {
+            visibility: hidden;
+            width: 300px;
+            height: 100px;
+            border: 1px solid black;
+            position: absolute;
+            z-index: 1;
+            left: 500px;
+        }
+        .shotname:hover .infotext {
+            #visibility: visible;
+        }
+        .info {
+            padding: 20px;  
+            font-size: 1em; 
+            color: silver;
+        }
     </style>
 </head>
 <body>
 
-<pre>
     <?php
         $configData = yaml_parse_file(__DIR__ . '/config.yaml');
 
@@ -70,14 +94,14 @@
                 ksort($list, SORT_STRING | SORT_FLAG_CASE);
                 foreach ($list as $scene => $data) {
                     echo "\n<li >";
-                    echo "<div class='toggleitem'>", $scene, "<div class='count'>", count($data)  ," shot(s)</div></div>";
+                    echo "<div class='toggleitem'>", $scene, "<span class='count'>", count($data)  ," shot(s)</span></div>";
 
                     echo "<div class='content'>";
                     echo "<ul class='listshots'>"; 
                     ksort($data, SORT_STRING | SORT_FLAG_CASE);
                     foreach ($data as $shot) {
-                        echo "<li class='", $shot['status'], "'>", $shot['shot'];
-                        echo "<div class='info'>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</div>";
+                        echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'], "</span>";
+                        echo "<span class='info'>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</span>";
                         echo "</li>";
                     }                    
                     echo "</ul>";    
@@ -89,14 +113,44 @@
 
                 break;
             case 'date':
-                walkByDates($configData);
+                $list = walkByDates($configData);
+
+                echo "<ul class='listdates'>";
+                krsort($list, SORT_STRING | SORT_FLAG_CASE);
+                foreach ($list as $date => $data) {
+                    echo "\n<li >";
+                    echo "<div class='toggleitem'>", $date, "<span class='count'>", count($data)  ," shot(s)</span></div>";
+
+                    echo "<div class='content'>";
+                    echo "<ul class='listshots'>"; 
+                    ksort($data, SORT_STRING | SORT_FLAG_CASE);
+                    foreach ($data as $shot) {
+                        echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'];
+                        echo "<div class='infotext'>sdfsdgdgdfdfs</div>";
+                        echo "</span>";
+                        echo "<span class='info'>", explode("/", $shot['vendor'])[0], "</span>";
+                        echo "</li>";
+                    }                    
+                    echo "</ul>";    
+
+                    echo "</div>";
+                    echo "</li>";              
+                }
+                echo "</ul>";
                 break;
             case 'vendor':
                 walkByVendors($configData);
                 break;
         }
             
-        function walkByVendors($configData)
+                
+        /**
+         * walkByVendors
+         *
+         * @param  mixed $configData
+         * @return array $shotList
+         */
+        function walkByVendors($configData) : array
         {
             $reValid = $configData['regexp']['valid'];
             $reWarn = $configData['regexp']['warn'];
@@ -158,6 +212,12 @@
             return ($shotList);
         }
 
+        /**
+         * walkByScenes
+         *
+         * @param  mixed $configData
+         * @return array $shotList
+         */
         function walkByScenes($configData)
         {
             $reValid = $configData['regexp']['valid'];
@@ -205,6 +265,12 @@
             return ($shotList);
         }   
         
+        /**
+         * walkByDates
+         *
+         * @param  mixed $configData
+         * @return array $shotList
+         */
         function walkByDates($configData)
         {
             $reValid = $configData['regexp']['valid'];
@@ -247,7 +313,7 @@
                     }
                 }
             }
-            print_r($shotList);
+            return ($shotList);
         }
     ?>
     <script>
