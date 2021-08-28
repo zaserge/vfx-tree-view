@@ -62,16 +62,19 @@
             font-size: 1.5em;
         }
         .shotname .infotext {
+            font-size: 0.7em;
+            padding: 5px;
             visibility: hidden;
-            width: 300px;
+            width: 500px;
             height: 100px;
             border: 1px solid black;
             position: absolute;
             z-index: 1;
-            left: 500px;
+            left: 300px;
+            background-color: white;
         }
         .shotname:hover .infotext {
-            #visibility: visible;
+            visibility: visible;
         }
         .info {
             padding: 20px;  
@@ -100,7 +103,13 @@
                     echo "<ul class='listshots'>"; 
                     ksort($data, SORT_STRING | SORT_FLAG_CASE);
                     foreach ($data as $shot) {
-                        echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'], "</span>";
+                        echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'];
+                        echo "<div class='infotext'>";
+                        echo "<p>Vendor: ", explode("/", $shot['vendor'])[0], "</p>";
+                        echo "<p>Date: ", $shot['date'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'], "</p>";
+                        echo "</div>";
+                        echo "</span>";
                         echo "<span class='info'>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</span>";
                         echo "</li>";
                     }                    
@@ -126,7 +135,11 @@
                     ksort($data, SORT_STRING | SORT_FLAG_CASE);
                     foreach ($data as $shot) {
                         echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'];
-                        echo "<div class='infotext'>sdfsdgdgdfdfs</div>";
+                        echo "<div class='infotext'>";
+                        echo "<p>Vendor: ", explode("/", $shot['vendor'])[0], "</p>";
+                        echo "<p>Date: ", $shot['date'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'], "</p>";
+                        echo "</div>";
                         echo "</span>";
                         echo "<span class='info'>", explode("/", $shot['vendor'])[0], "</span>";
                         echo "</li>";
