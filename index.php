@@ -3,7 +3,7 @@
 <head>
     <style>
         body {
-            padding-left: 100px;
+            margin-left: 100px;
             width: 700px;
         }
         .info {
@@ -14,19 +14,44 @@
         }
         .listscenes {
             font-weight: bold;
-            font-size: larger;
+            font-size: 1.5em;
+            list-style-image: url(images/clapperboard.png);
+        } 
+        
+        .toggleitem {
+            cursor: pointer;
         }
         .listshots {
             font-family: monospace;
             font-weight: normal;
-            font-size: smaller;
+            font-size: 1rem;
+            list-style-type: square;
+            list-style-image: none;
         }
-        .active, .collapsible:hover {
+        .active, .toggleitem:hover {
             background-color: #DDD;
         }
         .content {
             display: none;
             background-color: #EEE;
+        }
+        .count {
+            font-size: 0.6em;
+            font-weight: normal;
+            display: inline-block;
+            margin-left: 3em;
+        }
+        .valid::marker {
+            color: green;
+            font-size: 1.5em;
+        }
+        .warn::marker {
+            color: yellow;
+            font-size: 1.5em;
+        }
+        .error::marker {
+            color: red;
+            font-size: 1.5em;
         }
     </style>
 </head>
@@ -44,13 +69,14 @@
                 echo "<ul class='listscenes'>";
                 ksort($list, SORT_STRING | SORT_FLAG_CASE);
                 foreach ($list as $scene => $data) {
-                    echo "\n<li class='collapsible'>", $scene;
+                    echo "\n<li >";
+                    echo "<div class='toggleitem'>", $scene, "<div class='count'>", count($data)  ," shot(s)</div></div>";
 
                     echo "<div class='content'>";
                     echo "<ul class='listshots'>"; 
                     ksort($data, SORT_STRING | SORT_FLAG_CASE);
                     foreach ($data as $shot) {
-                        echo "<li>", $shot['shot'];
+                        echo "<li class='", $shot['status'], "'>", $shot['shot'];
                         echo "<div class='info'>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</div>";
                         echo "</li>";
                     }                    
@@ -95,7 +121,7 @@
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
-                                                "status" => "VALID" 
+                                                "status" => "valid" 
                                                 ]);
                                 }
                                 elseif (preg_match($reWarn, $item, $matches)) {
@@ -108,7 +134,7 @@
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
-                                                "status" => "WARN"
+                                                "status" => "warn"
                                                 ]);
                                 }
                                 else {
@@ -121,7 +147,7 @@
                                                 "scene" => "Bad naming",
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
-                                                "status" => "ERROR"
+                                                "status" => "error"
                                                 ]);
                                 }
                             }
@@ -156,7 +182,7 @@
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
-                                                "status" => "WARN"
+                                                "status" => "valid"
                                                 ];
                                 }
                                 elseif (preg_match($reWarn, $item, $matches)) {
@@ -168,7 +194,7 @@
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
-                                                "status" => "WARN"
+                                                "status" => "warn"
                                                 ];
                                 }
                             }
@@ -202,7 +228,7 @@
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
-                                                "status" => "VALID" 
+                                                "status" => "valid" 
                                                 ]);
                                 }
                                 elseif (preg_match($reWarn, $item, $matches)) {
@@ -213,7 +239,7 @@
                                                 "scene" => $matches['scene'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
-                                                "status" => "WARN"
+                                                "status" => "warn"
                                                 ]);
                                 }
                             }
@@ -225,13 +251,13 @@
         }
     ?>
     <script>
-        var coll = document.getElementsByClassName("collapsible");
+        var coll = document.getElementsByClassName("toggleitem");
         var i;
 
         for (i = 0; i < coll.length; i++) {
             coll[i].addEventListener("click", function() {
                 this.classList.toggle("active");
-                var content = this.getElementsByClassName("content")[0];
+                var content = this.nextElementSibling;
                 if (content.style.display === "block") {
                     content.style.display = "none";
                 } else {
