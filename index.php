@@ -82,12 +82,20 @@
             color: silver;
             display: none;
         }
+        .timestamp {
+            font-family: sans-serif;  
+            font-weight: bold;
+            font-size: 1.2em;
+            margin: 2em;
+        }
     </style>
 </head>
 <body>
 
     <?php
         $configData = yaml_parse_file(__DIR__ . '/config.yaml');
+
+        echo "<div class='timestamp'>", date("F j, Y, H:i"), "</div>";
 
         $order = $_GET['order'] ?? 'vendor';
         switch ($order) {
