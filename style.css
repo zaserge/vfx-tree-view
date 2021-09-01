@@ -1,9 +1,7 @@
 body {
 	margin-left: 100px;
 	width: 700px;
-}
-ul {
-	font-family: sans-serif;         
+	font-family: sans-serif;
 }
 .listscenes {
 	font-weight: bold;
@@ -79,8 +77,17 @@ ul {
 	display: none;
 }
 .timestamp {
-	font-family: sans-serif;  
+	text-align: right;
 	font-weight: bold;
-	font-size: 1.2em;
-	margin: 2em;
+	font-size: 1em;
+	padding: 5px;
+	background-color: rgb(240, 240, 240);
 }
+.total {
+	text-align: right;
+	font-weight: bold;
+	font-size: 1em;
+	padding: 5px;
+	background-color: rgb(240, 240, 240);
+}
+

@@ -8,8 +8,10 @@
     <?php
         $configData = yaml_parse_file(__DIR__ . '/config.yaml');
 
+        echo "<h2>", $configData['title'], "</h2>";
+
         date_default_timezone_set($configData['timezone']);
-        echo "<div class='timestamp'>", date("F j, Y, H:i:s"), "</div>";
+        echo "<p class='timestamp'>", date("F j, Y, H:i:s"), "</p>";
 
         $order = $_GET['order'] ?? 'vendor';
         switch ($order) {
@@ -20,7 +22,8 @@
                 ksort($list, SORT_STRING | SORT_FLAG_CASE);
                 foreach ($list as $scene => $data) {
                     echo "\n<li >";
-                    echo "<div class='toggleitem'>", $scene, "<span class='count'>", count($data)  ," shot(s)</span></div>";
+                    $c = count($data);
+                    echo "<div class='toggleitem'>", $scene, "<span class='count'>", $c, $c > 1 ? " shots" : " shot ", "</span></div>";
 
                     echo "<div class='content'>";
                     echo "<ul class='listshots'>"; 
@@ -43,6 +46,9 @@
                 }
                 echo "</ul>";
 
+                $c = count($list);
+                echo "<p class='total'>", $c, $c > 1 ? " scenes" : " scene ", "</p>";
+
                 break;
             case 'date':
                 $list = walkByDates($configData);
@@ -51,7 +57,8 @@
                 krsort($list, SORT_STRING | SORT_FLAG_CASE);
                 foreach ($list as $date => $data) {
                     echo "\n<li >";
-                    echo "<div class='toggleitem'>", $date, "<span class='count'>", count($data)  ," shot(s)</span></div>";
+                    $c = count($data);
+                    echo "<div class='toggleitem'>", $date, "<span class='count'>", $c, $c > 1 ? " shots" : " shot ", "</span></div>";
 
                     echo "<div class='content'>";
                     echo "<ul class='listshots'>"; 
@@ -73,6 +80,10 @@
                     echo "</li>";              
                 }
                 echo "</ul>";
+
+                $c = count($list);
+                echo "<p class='total'>", $c, $c > 1 ? " dates" : " date ", "</p>";
+
                 break;
             case 'vendor':
                 walkByVendors($configData);
@@ -252,7 +263,7 @@
             return ($shotList);
         }
     ?>
-    <script type="text/javascript" src="script.js"></script>
+    <script src="scripts.js"></script>
 
 </body>
 </html>
