@@ -1,101 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body {
-            margin-left: 100px;
-            width: 700px;
-        }
-        ul {
-            font-family: sans-serif;         
-        }
-        .listscenes {
-            font-weight: bold;
-            font-size: 1.2em;
-            list-style-image: url(images/clapperboard.png);
-        }         
-        .listdates {
-            font-weight: bold;
-            font-size: 1.2em;
-            list-style-image: url(images/calendar.png);
-        } 
-        .toggleitem {
-            cursor: pointer;
-            padding: 5px;
-        }
-        .listshots {
-            font-family: monospace;
-            font-weight: normal;
-            font-size: 1rem;
-            list-style-type: square;
-            list-style-image: none;
-        }
-        .active, .toggleitem:hover {
-            background-color: #DDD;
-        }
-        .shotname {
-            padding: 3px;
-            cursor: pointer;
-        }
-        .shotname:hover {
-            background-color: #DDD;
-        }
-        .content {
-            display: none;
-            background-color: #EEE;
-        }
-        .count {
-            font-size: 0.6em;
-            font-weight: normal;
-            margin-left: 3em;
-        }
-        .valid::marker {
-            color: green;
-            font-size: 1.5em;
-        }
-        .warn::marker {
-            color: yellow;
-            font-size: 1.5em;
-        }
-        .error::marker {
-            color: red;
-            font-size: 1.5em;
-        }
-        .shotname .infotext {
-            font-size: 0.7em;
-            padding: 5px;
-            visibility: hidden;
-            width: 500px;
-            height: 100px;
-            border: 1px solid black;
-            position: absolute;
-            z-index: 1;
-            left: 300px;
-            background-color: white;
-        }
-        .shotname:hover .infotext {
-            visibility: visible;
-        }
-        .info {
-            padding: 20px;  
-            font-size: 1em; 
-            color: silver;
-            display: none;
-        }
-        .timestamp {
-            font-family: sans-serif;  
-            font-weight: bold;
-            font-size: 1.2em;
-            margin: 2em;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <?php
         $configData = yaml_parse_file(__DIR__ . '/config.yaml');
 
-        echo "<div class='timestamp'>", date("F j, Y, H:i"), "</div>";
+        date_default_timezone_set($configData['timezone']);
+        echo "<div class='timestamp'>", date("F j, Y, H:i:s"), "</div>";
 
         $order = $_GET['order'] ?? 'vendor';
         switch ($order) {
@@ -338,22 +252,7 @@
             return ($shotList);
         }
     ?>
-    <script>
-        var coll = document.getElementsByClassName("toggleitem");
-        var i;
-
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                if (content.style.display === "block") {
-                    content.style.display = "none";
-                } else {
-                    content.style.display = "block";
-                }
-            });
-            } 
-    </script>
+    <script type="text/javascript" src="script.js"></script>
 
 </body>
 </html>
