@@ -7,11 +7,15 @@
 
     <?php
         $configData = yaml_parse_file(__DIR__ . '/config.yaml');
+        if ($configData == false)  {
+            echo "No config files";
+            exit(-1);
+        }
 
         echo "<h2>", $configData['title'], "</h2>";
 
         date_default_timezone_set($configData['timezone']);
-        echo "<p class='timestamp'>", date("F j, Y, H:i:s"), "</p>";
+        echo "<p class='timestamp'>", date("F j, Y, H:i:s T"), "</p>";
 
         $order = $_GET['order'] ?? 'vendor';
         switch ($order) {
@@ -47,7 +51,7 @@
                 echo "</ul>";
 
                 $c = count($list);
-                echo "<p class='total'>", $c, $c > 1 ? " scenes" : " scene ", "</p>";
+                echo "<p class='total'>", $c, $c == 1 ? " scene" : " scenes ", "</p>";
 
                 break;
             case 'date':
@@ -82,7 +86,7 @@
                 echo "</ul>";
 
                 $c = count($list);
-                echo "<p class='total'>", $c, $c > 1 ? " dates" : " date ", "</p>";
+                echo "<p class='total'>", $c, $c == 1 ? " date" : " dates ", "</p>";
 
                 break;
             case 'vendor':
