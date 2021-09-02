@@ -35,12 +35,12 @@
                     foreach ($data as $shot) {
                         echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'];
                         echo "<div class='infotext'>";
-                        echo "<p>Vendor: ", explode("/", $shot['vendor'])[0], "</p>";
+                        echo "<p>Vendor: ", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], "</p>";
                         echo "<p>Date: ", $shot['date'], "</p>";
-                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'] . '/' . $shot['date'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . DIRECTORY_SEPARATOR  . $shot['vendor'] . DIRECTORY_SEPARATOR  . $shot['date'], "</p>";
                         echo "</div>";
                         echo "</span>";
-                        echo "<span class='info'>", explode("/", $shot['vendor'])[0], " ", $shot['date'], "</span>";
+                        echo "<span class='info'>", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], " ", $shot['date'], "</span>";
                         echo "</li>";
                     }                    
                     echo "</ul>";    
@@ -70,12 +70,12 @@
                     foreach ($data as $shot) {
                         echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'];
                         echo "<div class='infotext'>";
-                        echo "<p>Vendor: ", explode("/", $shot['vendor'])[0], "</p>";
+                        echo "<p>Vendor: ", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], "</p>";
                         echo "<p>Date: ", $shot['date'], "</p>";
-                        echo "<p>Path: ", $configData['vendordir'] . '/' . $shot['vendor'] . '/' . $shot['date'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . DIRECTORY_SEPARATOR  . $shot['vendor'] . DIRECTORY_SEPARATOR  . $shot['date'], "</p>";
                         echo "</div>";
                         echo "</span>";
-                        echo "<span class='info'>", explode("/", $shot['vendor'])[0], "</span>";
+                        echo "<span class='info'>", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], "</span>";
                         echo "</li>";
                     }                    
                     echo "</ul>";    
@@ -109,9 +109,9 @@
             $shotList = [];
 
             foreach ($configData['vendors'] as $vendor) {
-                $venDir = $configData['vendordir'] . '/' . $vendor;    
+                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR  . $vendor;    
                 foreach (scandir($venDir) as $date) {
-                    $datePath = $venDir . '/' . $date;
+                    $datePath = $venDir . DIRECTORY_SEPARATOR  . $date;
 
                     if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date)) {
                         foreach (scandir($datePath) as $item) {
@@ -177,9 +177,9 @@
             $shotList = [];
 
             foreach ($configData['vendors'] as $vendor) {
-                $venDir = $configData['vendordir'] . '/' . $vendor;    
+                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR  . $vendor;    
                 foreach (scandir($venDir) as $date) {
-                    $datePath = $venDir . '/' . $date;
+                    $datePath = $venDir . DIRECTORY_SEPARATOR  . $date;
 
                     if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date)) {
                         foreach (scandir($datePath) as $item) {
@@ -230,9 +230,9 @@
             $shotList = [];
 
             foreach ($configData['vendors'] as $vendor) {
-                $venDir = $configData['vendordir'] . '/' . $vendor;    
+                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR  . $vendor;    
                 foreach (scandir($venDir) as $date) {
-                    $datePath = $venDir . '/' . $date;
+                    $datePath = $venDir . DIRECTORY_SEPARATOR  . $date;
 
                     if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date)) {
                         foreach (scandir($datePath) as $item) {
