@@ -38,6 +38,12 @@ body {
 	display: none;
 	background-color: #EEE;
 }
+.raw1 {
+    background-color: #EEE;
+}
+.raw2 {
+    background-color: #DDD;
+}
 .count {
 	font-size: 0.6em;
 	font-weight: normal;

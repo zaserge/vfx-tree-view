@@ -16,7 +16,14 @@
 
         date_default_timezone_set($configData['timezone']);
         echo "<p class='timestamp'>", date("F j, Y, H:i:s T"), "</p>";
-
+    ?>
+    
+    <ul id='progress' class='progress'></ul>
+    <script>
+        var ul = document.getElementById("progress");
+    </script>
+    
+    <?php        
         $order = $_GET['order'] ?? 'vendor';
         switch ($order) {
             case 'scene':
@@ -32,15 +39,21 @@
                     echo "<div class='content'>";
                     echo "<ul class='listshots'>"; 
                     ksort($data, SORT_STRING | SORT_FLAG_CASE);
+                    $index = "";
+                    $rowclass = false;
                     foreach ($data as $shot) {
-                        echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'];
+                        if (strcmp($index, $shot['index']) != 0) {
+                            $index = $shot['index'];
+                            $rowclass = !$rowclass;
+                        }
+                        echo "<li class='", $rowclass ? "raw1" : "raw2", " ", $shot['status'], "'><span class='shotname'>", $shot['shot'];
                         echo "<div class='infotext'>";
-                        echo "<p>Vendor: ", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], "</p>";
+                        echo "<p>Vendor: ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</p>";
                         echo "<p>Date: ", $shot['date'], "</p>";
-                        echo "<p>Path: ", $configData['vendordir'] . DIRECTORY_SEPARATOR  . $shot['vendor'] . DIRECTORY_SEPARATOR  . $shot['date'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . DIRECTORY_SEPARATOR . $shot['vendor'] . DIRECTORY_SEPARATOR . $shot['date'], "</p>";
                         echo "</div>";
                         echo "</span>";
-                        echo "<span class='info'>", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], " ", $shot['date'], "</span>";
+                        echo "<span class='info'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], " ", $shot['date'], "</span>";
                         echo "</li>";
                     }                    
                     echo "</ul>";    
@@ -67,15 +80,21 @@
                     echo "<div class='content'>";
                     echo "<ul class='listshots'>"; 
                     ksort($data, SORT_STRING | SORT_FLAG_CASE);
+                    $index = "";
+                    $rowclass = false;
                     foreach ($data as $shot) {
-                        echo "<li class='", $shot['status'], "'><span class='shotname'>", $shot['shot'];
+                        if (strcmp($index, $shot['index']) != 0) {
+                            $index = $shot['index'];
+                            $rowclass = !$rowclass;
+                        }                        
+                        echo "<li class='", $rowclass ? "raw1" : "raw2", " ", $shot['status'], "'><span class='shotname'>", $shot['shot'];
                         echo "<div class='infotext'>";
-                        echo "<p>Vendor: ", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], "</p>";
+                        echo "<p>Vendor: ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</p>";
                         echo "<p>Date: ", $shot['date'], "</p>";
-                        echo "<p>Path: ", $configData['vendordir'] . DIRECTORY_SEPARATOR  . $shot['vendor'] . DIRECTORY_SEPARATOR  . $shot['date'], "</p>";
+                        echo "<p>Path: ", $configData['vendordir'] . DIRECTORY_SEPARATOR . $shot['vendor'] . DIRECTORY_SEPARATOR . $shot['date'], "</p>";
                         echo "</div>";
                         echo "</span>";
-                        echo "<span class='info'>", explode(DIRECTORY_SEPARATOR , $shot['vendor'])[0], "</span>";
+                        echo "<span class='info'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
                         echo "</li>";
                     }                    
                     echo "</ul>";    
@@ -109,9 +128,9 @@
             $shotList = [];
 
             foreach ($configData['vendors'] as $vendor) {
-                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR  . $vendor;    
+                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor;    
                 foreach (scandir($venDir) as $date) {
-                    $datePath = $venDir . DIRECTORY_SEPARATOR  . $date;
+                    $datePath = $venDir . DIRECTORY_SEPARATOR . $date;
 
                     if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date)) {
                         foreach (scandir($datePath) as $item) {
@@ -124,6 +143,7 @@
                                     array_push($shotList[$vendor][$date], 
                                                 [ "shot" => $item,
                                                 "scene" => $matches['scene'],
+                                                "index" => $matches['index'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "valid" 
@@ -137,6 +157,7 @@
                                     array_push($shotList[$vendor][$date], 
                                                 [ "shot" => $item, 
                                                 "scene" => $matches['scene'],
+                                                "index" => $matches['index'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "warn"
@@ -149,7 +170,8 @@
                                         $shotList[$vendor][$date] = [];
                                     array_push($shotList[$vendor][$date], 
                                                 [ "shot" => $item, 
-                                                "scene" => "Bad naming",
+                                                "scene" => "",
+                                                "index" => "",
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "error"
@@ -177,9 +199,9 @@
             $shotList = [];
 
             foreach ($configData['vendors'] as $vendor) {
-                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR  . $vendor;    
+                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor;    
                 foreach (scandir($venDir) as $date) {
-                    $datePath = $venDir . DIRECTORY_SEPARATOR  . $date;
+                    $datePath = $venDir . DIRECTORY_SEPARATOR . $date;
 
                     if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date)) {
                         foreach (scandir($datePath) as $item) {
@@ -191,6 +213,7 @@
                                     $shotList[$matches['scene']][$item] =  
                                                 [ "shot" => $item, 
                                                 "scene" => $matches['scene'],
+                                                "index" => $matches['index'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "valid"
@@ -203,6 +226,7 @@
                                         $shotList[$matches['scene']][$item] =
                                                 [ "shot" => $item, 
                                                 "scene" => $matches['scene'],
+                                                "index" => $matches['index'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "warn"
@@ -230,9 +254,9 @@
             $shotList = [];
 
             foreach ($configData['vendors'] as $vendor) {
-                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR  . $vendor;    
+                $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor;    
                 foreach (scandir($venDir) as $date) {
-                    $datePath = $venDir . DIRECTORY_SEPARATOR  . $date;
+                    $datePath = $venDir . DIRECTORY_SEPARATOR . $date;
 
                     if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date)) {
                         foreach (scandir($datePath) as $item) {
@@ -243,6 +267,7 @@
                                     array_push($shotList[$date], 
                                                 [ "shot" => $item,
                                                 "scene" => $matches['scene'],
+                                                "index" => $matches['index'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "valid" 
@@ -254,6 +279,7 @@
                                     array_push($shotList[$date], 
                                                 [ "shot" => $item, 
                                                 "scene" => $matches['scene'],
+                                                "index" => $matches['index'],
                                                 "vendor" => $vendor, 
                                                 "date" => $date, 
                                                 "status" => "warn"
