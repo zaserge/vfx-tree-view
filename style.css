@@ -3,15 +3,20 @@ body {
 	width: 700px;
 	font-family: sans-serif;
 }
+#getlist {
+    font-size: 1.2em;
+}
 .listscenes {
 	font-weight: bold;
-	font-size: 1.2em;
 	list-style-image: url(images/clapperboard.png);
 }         
 .listdates {
 	font-weight: bold;
-	font-size: 1.2em;
 	list-style-image: url(images/calendar.png);
+} 
+.listvendors {
+	font-weight: bold;
+	list-style-image: url(images/vendor.png);
 } 
 .toggleitem {
 	cursor: pointer;
@@ -20,7 +25,7 @@ body {
 .listshots {
 	font-family: monospace;
 	font-weight: normal;
-	font-size: 1rem;
+/*	font-size: 1.2em;  */
 	list-style-type: square;
 	list-style-image: none;
 }
@@ -34,7 +39,7 @@ body {
 .shotname:hover {
 	background-color: #DDD;
 }
-.content {
+.li-content {
 	display: none;
 	background-color: #EEE;
 }
@@ -76,7 +81,7 @@ body {
 .shotname:hover .infotext {
 	visibility: visible;
 }
-.info {
+.briefinfo {
 	padding: 20px;  
 	font-size: 1em; 
 	color: silver;
