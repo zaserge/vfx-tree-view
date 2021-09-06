@@ -197,7 +197,7 @@
             {
                 echo "\n<li class='vendor'>";
                 $c = count($scenelist);
-                echo "<div class='toggleitem'>", explode(DIRECTORY_SEPARATOR, $vendor)[0], "<span class='count'>", $c, ($c > 1 ? " dates" : " date"), "</span></div>";
+                echo "<div class='toggleitem'>", explode(DIRECTORY_SEPARATOR, $vendor)[0], "<span class='count'>", $c, ($c > 1 ? " scenes" : " scene"), "</span></div>";
 
                 echo "<div class='li-content'>";
                 echo "<ul class='listscenes'>";

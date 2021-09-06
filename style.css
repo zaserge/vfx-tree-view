@@ -101,4 +101,28 @@ body {
 	padding: 5px;
 	background-color: rgb(240, 240, 240);
 }
-
+.buttons {
+    position: fixed ;
+    z-index: 1;
+    left: auto;
+    top: 20px;
+}
+.button {
+    display: inline-block;
+    padding: 5px;
+    margin: 5px;
+    background-color: gainsboro;
+    color: black;
+}
+a:link, a:visited {
+    color: black;
+    text-decoration: none;
+}
+a:hover {
+    color: black;
+    background-color: coral;
+    text-decoration: none;
+}
+.toptitle {
+    padding-top: 70px;
+}

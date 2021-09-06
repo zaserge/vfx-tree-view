@@ -12,8 +12,17 @@
         echo "No config files";
         exit(-1);
     }
+    ?>
 
-    echo "<h2>", $configData['title'], "</h2>";
+    <div class='buttons'>
+        <div class='button'><a href='.?order=scene'>by scenes</a></div>
+        <div class='button'><a href='.?order=date'>by dates</a></div>
+        <div class='button'><a href='.?order=vendordate'>by vendor then date</a></div>
+        <div class='button'><a href='.?order=vendorscene'>by vendor then scene</a></div>
+    </div>
+
+    <?php
+    echo "<h2 class='toptitle'>", $configData['title'], "</h2>";
 
     date_default_timezone_set($configData['timezone']);
     echo "<p class='timestamp'>", date("F j, Y, H:i:s T"), "</p>";
