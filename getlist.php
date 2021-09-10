@@ -8,7 +8,8 @@
     {
         echo "<li>", explode(DIRECTORY_SEPARATOR, $s)[0], "</li>";
         ob_flush();
-        usleep(10000);
+        flush();
+        #usleep(10000);
     }
 
     $order = $_GET['order'];
@@ -273,49 +274,47 @@
         {
             printProgress($vendor);
 
-            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor;    
-            foreach (scandir($venDir) as $date)
-            {
-                $datePath = $venDir . DIRECTORY_SEPARATOR . $date;
+            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";       
 
-                if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date))
+            foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath)
+            {
+                $date = basename($datePath);
+
+                foreach (scandir($datePath) as $item)
                 {
-                    foreach (scandir($datePath) as $item)
+                    if (!str_starts_with($item, ".") )
                     {
-                        if (!str_starts_with($item, ".") )
+                        if (preg_match($reValid, $item, $matches))
                         {
-                            if (preg_match($reValid, $item, $matches))
+                            $matches['scene'] = strtoupper($matches['scene']);
+                            if (!isset($shotList[$matches['scene']]))
                             {
-                                $matches['scene'] = strtoupper($matches['scene']);
-                                if (!isset($shotList[$matches['scene']]))
-                                {
-                                    $shotList[$matches['scene']] = [];
-                                }
-                                $shotList[$matches['scene']][$item] =  
-                                    [ "shot" => $item, 
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "valid"
-                                    ];
+                                $shotList[$matches['scene']] = [];
                             }
-                            elseif (preg_match($reWarn, $item, $matches))
+                            $shotList[$matches['scene']][$item] =  
+                                [ "shot" => $item, 
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "valid"
+                                ];
+                        }
+                        elseif (preg_match($reWarn, $item, $matches))
+                        {
+                            $matches['scene'] = strtoupper($matches['scene']);
+                            if (!isset($shotList[$matches['scene']]))
                             {
-                                $matches['scene'] = strtoupper($matches['scene']);
-                                if (!isset($shotList[$matches['scene']]))
-                                {
-                                    $shotList[$matches['scene']] = [];
-                                }
-                                $shotList[$matches['scene']][$item] =
-                                    [ "shot" => $item, 
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "warn"
-                                    ];
+                                $shotList[$matches['scene']] = [];
                             }
+                            $shotList[$matches['scene']][$item] =
+                                [ "shot" => $item, 
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "warn"
+                                ];
                         }
                     }
                 }
@@ -341,52 +340,50 @@
         {
             printProgress($vendor);
 
-            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor;    
+            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";    
 
-            foreach (scandir($venDir) as $date) {
-                $datePath = $venDir . DIRECTORY_SEPARATOR . $date;
+            foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath)
+            {
+                $date = basename($datePath);
 
-                if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date))
+                $shotList[$date] = [];
+
+                foreach (scandir($datePath) as $item)
                 {
-                    $shotList[$date] = [];
-
-                    foreach (scandir($datePath) as $item)
+                    if (!str_starts_with($item, ".") )
                     {
-                        if (!str_starts_with($item, ".") )
+                        if (preg_match($reValid, $item, $matches))
                         {
-                            if (preg_match($reValid, $item, $matches))
-                            {
-                                array_push($shotList[$date], 
-                                    [ "shot" => $item,
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "valid" 
-                                    ]);
-                            }
-                            elseif (preg_match($reWarn, $item, $matches))
-                            {
-                                array_push($shotList[$date], 
-                                    [ "shot" => $item, 
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "warn"
-                                    ]);
-                            }
-                            else
-                            {
-                                array_push($shotList[$date], 
-                                    [ "shot" => $item, 
-                                    "scene" => "",
-                                    "index" => "",
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "error"
-                                    ]);
-                            }
+                            array_push($shotList[$date], 
+                                [ "shot" => $item,
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "valid" 
+                                ]);
+                        }
+                        elseif (preg_match($reWarn, $item, $matches))
+                        {
+                            array_push($shotList[$date], 
+                                [ "shot" => $item, 
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "warn"
+                                ]);
+                        }
+                        else
+                        {
+                            array_push($shotList[$date], 
+                                [ "shot" => $item, 
+                                "scene" => "",
+                                "index" => "",
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "error"
+                                ]);
                         }
                     }
                 }
@@ -413,53 +410,50 @@
             printProgress($vendor);
 
             $shotList[$vendor] = [];
-            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor;    
+            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*"; 
 
-            foreach (scandir($venDir) as $date)
+            foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath)
             {
-                $datePath = $venDir . DIRECTORY_SEPARATOR . $date;
+                $date = basename($datePath);
 
-                if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date))
+                $shotList[$vendor][$date] = [];
+
+                foreach (scandir($datePath) as $item)
                 {
-                    $shotList[$vendor][$date] = [];
-
-                    foreach (scandir($datePath) as $item)
+                    if (!str_starts_with($item, ".") )
                     {
-                        if (!str_starts_with($item, ".") )
+                        if (preg_match($reValid, $item, $matches))
                         {
-                            if (preg_match($reValid, $item, $matches))
-                            {
-                                array_push($shotList[$vendor][$date], 
-                                    [ "shot" => $item,
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "valid" 
-                                    ]);
-                            }
-                            elseif (preg_match($reWarn, $item, $matches))
-                            {
-                               array_push($shotList[$vendor][$date], 
-                                    [ "shot" => $item, 
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "warn"
-                                    ]);
-                            }
-                            else
-                            {
-                                array_push($shotList[$vendor][$date], 
-                                    [ "shot" => $item, 
-                                    "scene" => "",
-                                    "index" => "",
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "error"
-                                    ]);
-                            }
+                            array_push($shotList[$vendor][$date], 
+                                [ "shot" => $item,
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "valid" 
+                                ]);
+                        }
+                        elseif (preg_match($reWarn, $item, $matches))
+                        {
+                            array_push($shotList[$vendor][$date], 
+                                [ "shot" => $item, 
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "warn"
+                                ]);
+                        }
+                        else
+                        {
+                            array_push($shotList[$vendor][$date], 
+                                [ "shot" => $item, 
+                                "scene" => "",
+                                "index" => "",
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "error"
+                                ]);
                         }
                     }
                 }
@@ -486,50 +480,47 @@
             printProgress($vendor);
 
             $shotList[$vendor] = [];
-            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor;    
+            $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";    
 
-            foreach (scandir($venDir) as $date)
+            foreach (glob($venDir, GLOB_ONLYDIR) as $datePath)
             {
-                $datePath = $venDir . DIRECTORY_SEPARATOR . $date;
+                $date = basename($datePath);
 
-                if (is_dir($datePath) && !str_starts_with($date, ".") && preg_match('/^\d+$/', $date))
+                foreach (scandir($datePath) as $item)
                 {
-                    foreach (scandir($datePath) as $item)
+                    if (!str_starts_with($item, ".") )
                     {
-                        if (!str_starts_with($item, ".") )
+                        if (preg_match($reValid, $item, $matches))
                         {
-                            if (preg_match($reValid, $item, $matches))
+                            $matches['scene'] = strtoupper($matches['scene']);
+                            if (!isset($shotList[$vendor][$matches['scene']]))
                             {
-                                $matches['scene'] = strtoupper($matches['scene']);
-                                if (!isset($shotList[$vendor][$matches['scene']]))
-                                {
-                                    $shotList[$vendor][$matches['scene']] = [];
-                                }
-                                $shotList[$vendor][$matches['scene']][$item] =  
-                                    [ "shot" => $item, 
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "valid"
-                                    ];
+                                $shotList[$vendor][$matches['scene']] = [];
                             }
-                            elseif (preg_match($reWarn, $item, $matches))
+                            $shotList[$vendor][$matches['scene']][$item] =  
+                                [ "shot" => $item, 
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "valid"
+                                ];
+                        }
+                        elseif (preg_match($reWarn, $item, $matches))
+                        {
+                            $matches['scene'] = strtoupper($matches['scene']);
+                            if (!isset($shotList[$vendor][$matches['scene']]))
                             {
-                                $matches['scene'] = strtoupper($matches['scene']);
-                                if (!isset($shotList[$vendor][$matches['scene']]))
-                                {
-                                    $shotList[$vendor][$matches['scene']] = [];
-                                }
-                                $shotList[$vendor][$matches['scene']][$item] =
-                                    [ "shot" => $item, 
-                                    "scene" => $matches['scene'],
-                                    "index" => $matches['index'],
-                                    "vendor" => $vendor, 
-                                    "date" => $date, 
-                                    "status" => "warn"
-                                    ];
+                                $shotList[$vendor][$matches['scene']] = [];
                             }
+                            $shotList[$vendor][$matches['scene']][$item] =
+                                [ "shot" => $item, 
+                                "scene" => $matches['scene'],
+                                "index" => $matches['index'],
+                                "vendor" => $vendor, 
+                                "date" => $date, 
+                                "status" => "warn"
+                                ];
                         }
                     }
                 }
