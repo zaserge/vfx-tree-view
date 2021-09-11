@@ -1,7 +1,6 @@
-
 <?php
 
-header('Cache-Control: no-cache'); 
+header('Cache-Control: no-cache');
 header('Content-type: text/html; charset=utf-8');
 
 mb_internal_encoding("UTF-8");
@@ -35,16 +34,14 @@ switch ($order) {
             echo "<div class='toggleitem'>", $scene, "<span class='count'>", $c, ($c > 1 ? " shots" : " shot"), "</span></div>";
 
             echo "<div class='li-content'>";
-            echo "<ul class='listshots'>"; 
+            echo "<ul class='listshots'>";
             ksort($data, SORT_STRING | SORT_FLAG_CASE);
             $index = "";
             $rowclass = false;
-            foreach ($data as $shot)
-            {
-                if (strcmp($index, $shot['index']) != 0)
-                {
+            foreach ($data as $shot) {
+                if (strcmp($index, $shot['index']) != 0) {
                     $index = $shot['index'];
-                    $rowclass =! $rowclass;
+                    $rowclass = !$rowclass;
                 }
                 echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                 echo "<span class='shotname'>", $shot['shot'];
@@ -58,7 +55,7 @@ switch ($order) {
                 echo "</span>";
                 echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], " ", $shot['date'], "</span>";
                 echo "</li>";
-            }                    
+            }
             echo "</ul>"; # id='listshots'  
 
             echo "</div>"; # id='li-content'
@@ -81,24 +78,21 @@ switch ($order) {
         echo "<ul class='listdates'>";
 
         krsort($datelist, SORT_STRING | SORT_FLAG_CASE);
-        foreach ($datelist as $date => $data)
-        {
+        foreach ($datelist as $date => $data) {
             echo "\n<li class='date'>";
             $c = count($data);
             echo "<div class='toggleitem'>", $date, "<span class='count'>", $c, ($c > 1 ? " shots" : " shot"), "</span></div>";
 
             echo "<div class='li-content'>";
-            echo "<ul class='listshots'>"; 
+            echo "<ul class='listshots'>";
             ksort($data, SORT_STRING | SORT_FLAG_CASE);
             $index = "";
             $rowclass = false;
-            foreach ($data as $shot)
-            {
-                if (strcmp($index, $shot['index']) != 0)
-                {
+            foreach ($data as $shot) {
+                if (strcmp($index, $shot['index']) != 0) {
                     $index = $shot['index'];
-                    $rowclass =! $rowclass;
-                }                        
+                    $rowclass = !$rowclass;
+                }
                 echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                 echo "<span class='shotname'>", $shot['shot'];
                 echo "<div class='infotext'>";
@@ -111,7 +105,7 @@ switch ($order) {
                 echo "</span>";
                 echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
                 echo "</li>";
-            }                    
+            }
             echo "</ul>"; # id='listshots'     
 
             echo "</div>"; # id='li-content'  
@@ -135,8 +129,7 @@ switch ($order) {
         echo "<ul class='listvendors'>";
 
         ksort($vendorlist, SORT_STRING | SORT_FLAG_CASE);
-        foreach ($vendorlist as $vendor => $datelist)
-        {
+        foreach ($vendorlist as $vendor => $datelist) {
             echo "\n<li class='vendor'>";
             $c = count($datelist);
             echo "<div class='toggleitem'>", explode(DIRECTORY_SEPARATOR, $vendor)[0], "<span class='count'>", $c, ($c > 1 ? " dates" : " date"), "</span></div>";
@@ -145,24 +138,21 @@ switch ($order) {
             echo "<ul class='listdates'>";
 
             krsort($datelist, SORT_STRING | SORT_FLAG_CASE);
-            foreach ($datelist as $date => $data)
-            {
+            foreach ($datelist as $date => $data) {
                 echo "\n<li class='date'>";
                 $c = count($data);
                 echo "<div class='toggleitem'>", $date, "<span class='count'>", $c, ($c > 1 ? " shots" : " shot"), "</span></div>";
 
                 echo "<div class='li-content'>";
-                echo "<ul class='listshots'>"; 
+                echo "<ul class='listshots'>";
                 ksort($data, SORT_STRING | SORT_FLAG_CASE);
                 $index = "";
                 $rowclass = false;
-                foreach ($data as $shot)
-                {
-                    if (strcmp($index, $shot['index']) != 0)
-                    {
+                foreach ($data as $shot) {
+                    if (strcmp($index, $shot['index']) != 0) {
                         $index = $shot['index'];
-                        $rowclass =! $rowclass;
-                    }                        
+                        $rowclass = !$rowclass;
+                    }
                     echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                     echo "<span class='shotname'>", $shot['shot'];
                     echo "<div class='infotext'>";
@@ -170,12 +160,12 @@ switch ($order) {
                     echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
                     echo "<b>Date:</b> ", $shot['date'], "<br>";
                     echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-    
+
                     echo "</div>"; # id='infotext'
                     echo "</span>";
                     echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
                     echo "</li>";
-                }                    
+                }
                 echo "</ul>"; # id='listshots'     
 
                 echo "</div>"; # id='li-content'  
@@ -205,8 +195,7 @@ switch ($order) {
         echo "<ul class='listvendors'>";
 
         ksort($vendorlist, SORT_STRING | SORT_FLAG_CASE);
-        foreach ($vendorlist as $vendor => $scenelist)
-        {
+        foreach ($vendorlist as $vendor => $scenelist) {
             echo "\n<li class='vendor'>";
             $c = count($scenelist);
             echo "<div class='toggleitem'>", explode(DIRECTORY_SEPARATOR, $vendor)[0], "<span class='count'>", $c, ($c > 1 ? " scenes" : " scene"), "</span></div>";
@@ -215,24 +204,21 @@ switch ($order) {
             echo "<ul class='listscenes'>";
 
             krsort($scenelist, SORT_STRING | SORT_FLAG_CASE);
-            foreach ($scenelist as $date => $data)
-            {
+            foreach ($scenelist as $date => $data) {
                 echo "\n<li class='scene'>";
                 $c = count($data);
                 echo "<div class='toggleitem'>", $date, "<span class='count'>", $c, ($c > 1 ? " shots" : " shot"), "</span></div>";
 
                 echo "<div class='li-content'>";
-                echo "<ul class='listshots'>"; 
+                echo "<ul class='listshots'>";
                 ksort($data, SORT_STRING | SORT_FLAG_CASE);
                 $index = "";
                 $rowclass = false;
-                foreach ($data as $shot)
-                {
-                    if (strcmp($index, $shot['index']) != 0)
-                    {
+                foreach ($data as $shot) {
+                    if (strcmp($index, $shot['index']) != 0) {
                         $index = $shot['index'];
-                        $rowclass =! $rowclass;
-                    }                        
+                        $rowclass = !$rowclass;
+                    }
                     echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                     echo "<span class='shotname'>", $shot['shot'];
                     echo "<div class='infotext'>";
@@ -240,12 +226,12 @@ switch ($order) {
                     echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
                     echo "<b>Date:</b> ", $shot['date'], "<br>";
                     echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-    
+
                     echo "</div>"; # id='infotext'
                     echo "</span>";
                     echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
                     echo "</li>";
-                }                    
+                }
                 echo "</ul>"; # id='listshots'     
 
                 echo "</div>"; # id='li-content'  
@@ -272,37 +258,33 @@ switch ($order) {
 
 function walkByScenes($configData)
 {
-   $shotList = [];
+    $shotList = [];
 
-    foreach ($configData['vendors'] as $vendor)
-    {
+    foreach ($configData['vendors'] as $vendor) {
         printProgress($vendor);
 
-        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";       
+        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";
 
-        foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath)
-        {
-            collectByScene($datePath, $vendor, $shotList);        
+        foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath) {
+            collectByScene($datePath, $vendor, $shotList);
         }
     }
     return ($shotList);
-}   
-    
+}
 
-function walkByVendorsScenes($configData) : array
+
+function walkByVendorsScenes($configData): array
 {
     $shotList = [];
 
-    foreach ($configData['vendors'] as $vendor)
-    {
+    foreach ($configData['vendors'] as $vendor) {
         printProgress($vendor);
 
         $shotList[$vendor] = [];
-        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";    
+        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";
 
-        foreach (glob($venDir, GLOB_ONLYDIR) as $datePath)
-        {
-            collectByScene($datePath, $vendor, $shotList[$vendor]);        
+        foreach (glob($venDir, GLOB_ONLYDIR) as $datePath) {
+            collectByScene($datePath, $vendor, $shotList[$vendor]);
         }
     }
     return ($shotList);
@@ -313,14 +295,12 @@ function walkByDates($configData)
 {
     $shotList = [];
 
-    foreach ($configData['vendors'] as $vendor)
-    {
+    foreach ($configData['vendors'] as $vendor) {
         printProgress($vendor);
 
-        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";    
+        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";
 
-        foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath)
-        {
+        foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath) {
             collectByDate($datePath, $vendor, $shotList);
         }
     }
@@ -328,19 +308,17 @@ function walkByDates($configData)
 }
 
 
-function walkByVendorsDates($configData) : array
+function walkByVendorsDates($configData): array
 {
     $shotList = [];
 
-    foreach ($configData['vendors'] as $vendor)
-    {
+    foreach ($configData['vendors'] as $vendor) {
         printProgress($vendor);
 
         $shotList[$vendor] = [];
-        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*"; 
+        $venDir = $configData['vendordir'] . DIRECTORY_SEPARATOR . $vendor . DIRECTORY_SEPARATOR . "[0-9]*";
 
-        foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath)
-        {
+        foreach (glob($venDir,  GLOB_ONLYDIR) as $datePath) {
             collectByDate($datePath, $vendor, $shotList[$vendor]);
         }
     }
@@ -348,49 +326,49 @@ function walkByVendorsDates($configData) : array
 }
 
 
-function collectByDate(mixed $datePath, string $vendor, array &$shotList) : void
+function collectByDate(mixed $datePath, string $vendor, array &$shotList): void
 {
     global $configData;
 
     $date = mb_substr(basename($datePath), 0, 8);
     $reTypes = $configData['regexp'];
 
-    if(!isset($shotList[$date]))
-    {
+    if (!isset($shotList[$date])) {
         $shotList[$date] = [];
     }
 
-    foreach (scandir($datePath) as $item)
-    {
-        if ($item[0] != ".")
-        {
+    foreach (scandir($datePath) as $item) {
+        if ($item[0] != ".") {
             $m = false;
-            foreach ($reTypes as $re)
-            {
-                if (preg_match($re['re'], $item, $matches))
-                {
-                    array_push($shotList[$date], 
-                        [ "shot" => $item,
-                        "scene" => $matches['scene'],
-                        "index" => $matches['index'],
-                        "vendor" => $vendor,
-                        "date" => $date, 
-                        "status" => $re['type'] 
-                    ]);
+            foreach ($reTypes as $re) {
+                if (preg_match($re['re'], $item, $matches)) {
+                    array_push(
+                        $shotList[$date],
+                        [
+                            "shot" => $item,
+                            "scene" => $matches['scene'],
+                            "index" => $matches['index'],
+                            "vendor" => $vendor,
+                            "date" => $date,
+                            "status" => $re['type']
+                        ]
+                    );
                     $m = true;
                     break;
                 }
             }
-            if (!$m)
-            {
-                array_push($shotList[$date], 
-                    [ "shot" => $item,
-                    "scene" => false,
-                    "index" => false,
-                    "vendor" => $vendor,
-                    "date" => $date, 
-                    "status" => 'unknown'
-                ]);
+            if (!$m) {
+                array_push(
+                    $shotList[$date],
+                    [
+                        "shot" => $item,
+                        "scene" => false,
+                        "index" => false,
+                        "vendor" => $vendor,
+                        "date" => $date,
+                        "status" => 'unknown'
+                    ]
+                );
             }
         }
     }
@@ -398,34 +376,32 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList) : void
 }
 
 
-function collectByScene(string $datePath, string $vendor, array &$list) : void
+function collectByScene(string $datePath, string $vendor, array &$list): void
 {
     global $configData;
 
     $date = basename($datePath);
     $reTypes = $configData['regexp'];
 
-    foreach (scandir($datePath) as $item)
-    {
-        if ($item[0] != ".")
-        {
-            foreach ($reTypes as $re)
-            {
-                if (preg_match($re['re'], $item, $matches))
-                {
+    foreach (scandir($datePath) as $item) {
+        if ($item[0] != ".") {
+            foreach ($reTypes as $re) {
+                if (preg_match($re['re'], $item, $matches)) {
                     $matches['scene'] = strtoupper($matches['scene']);
-                    if (!isset($list[$matches['scene']]))
-                    {
+                    if (!isset($list[$matches['scene']])) {
                         $list[$matches['scene']] = [];
                     }
-                    array_push($list[$matches['scene']],  
-                        [ "shot" => $item, 
-                        "scene" => $matches['scene'],
-                        "index" => $matches['index'], 
-                        "vendor" => $vendor,
-                        "date" => $date, 
-                        "status" => $re['type']
-                    ]);
+                    array_push(
+                        $list[$matches['scene']],
+                        [
+                            "shot" => $item,
+                            "scene" => $matches['scene'],
+                            "index" => $matches['index'],
+                            "vendor" => $vendor,
+                            "date" => $date,
+                            "status" => $re['type']
+                        ]
+                    );
                     break;
                 }
             }
