@@ -89,9 +89,12 @@ body {
 .timestamp {
 	text-align: right;
 	font-weight: bold;
-	font-size: 1em;
+	font-size: 0.833em;
 	padding: 5px;
 	background-color: rgb(240, 240, 240);
+}
+.order {
+	float: left;
 }
 .total {
 	text-align: right;
@@ -124,4 +127,9 @@ a:hover {
 }
 .toptitle {
     padding-top: 70px;
+}
+.copyright {
+	font-size: 0.7em;
+	color: darkgrey;
+	text-align: center;
 }

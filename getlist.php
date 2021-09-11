@@ -6,23 +6,23 @@ header('Content-type: text/html; charset=utf-8');
 mb_internal_encoding("UTF-8");
 
 $configData = yaml_parse_file(__DIR__ . '/config.yaml');
-
-
-function printProgress($s)
-{
-    echo "<li>", explode(DIRECTORY_SEPARATOR, $s)[0], "</li>";
-    ob_flush();
-    flush();
+if ($configData == false) {
+    echo "No config files";
+    exit(-1);
 }
+
+date_default_timezone_set($configData['timezone']);
+echo "<h2 class='toptitle'>", $configData['title'], "</h2>";
+echo "<div class='timestamp'>", date("F j, Y, H:i:s T");
 
 $order = $_GET['order'];
 
 switch ($order) {
     case 'scene':
-        echo "<h5>SCENES</h5>";
+        echo "<span class='order'><img src='images/clapperboard.png'> SCENES</span></div>";
 
         echo "<ul id='progress'>";
-        $scenelist = walkByScenes($configData);
+        $scenelist = walkByScenes();
         echo "</ul>"; # id='progress'
 
         echo "<ul class='listscenes'>";
@@ -57,8 +57,8 @@ switch ($order) {
                 echo "</li>";
             }
             echo "</ul>"; # id='listshots'  
-
             echo "</div>"; # id='li-content'
+
             echo "</li>";  # id='scene'
         }
 
@@ -69,10 +69,10 @@ switch ($order) {
         break;
 
     case 'date':
-        echo "<h5>DATES</h5>";
+        echo "<span class='order'><img src='images/calendar.png'> DATES</span></div>";
 
         echo "<ul id='progress'>";
-        $datelist = walkByDates($configData);
+        $datelist = walkByDates();
         echo "</ul>"; # id='progress'
 
         echo "<ul class='listdates'>";
@@ -107,8 +107,8 @@ switch ($order) {
                 echo "</li>";
             }
             echo "</ul>"; # id='listshots'     
-
             echo "</div>"; # id='li-content'  
+
             echo "</li>"; # id='date'               
         }
 
@@ -120,10 +120,10 @@ switch ($order) {
         break;
 
     case 'vendordate':
-        echo "<h5>VENDORS &#8594; DATES</h5>";
+        echo "<span class='order'><img src='images/vendor.png'> VENDORS &#8594; DATES</span></div>";
 
         echo "<ul id='progress'>";
-        $vendorlist = walkByVendorsDates($configData);
+        $vendorlist = walkByVendorsDates();
         echo "</ul>"; # id='progress'
 
         echo "<ul class='listvendors'>";
@@ -167,8 +167,8 @@ switch ($order) {
                     echo "</li>";
                 }
                 echo "</ul>"; # id='listshots'     
-
                 echo "</div>"; # id='li-content'  
+
                 echo "</li>"; # id='date'               
             }
 
@@ -186,10 +186,10 @@ switch ($order) {
         break;
 
     case 'vendorscene':
-        echo "<h5>VENDORS &#8594; SCENES</h5>";
+        echo "<span class='order'><img src='images/vendor.png'> VENDORS &#8594; SCENES</span></div>";
 
         echo "<ul id='progress'>";
-        $vendorlist = walkByVendorsScenes($configData);
+        $vendorlist = walkByVendorsScenes();
         echo "</ul>"; # id='progress'
 
         echo "<ul class='listvendors'>";
@@ -233,8 +233,8 @@ switch ($order) {
                     echo "</li>";
                 }
                 echo "</ul>"; # id='listshots'     
-
                 echo "</div>"; # id='li-content'  
+
                 echo "</li>"; # id='scene'               
             }
 
@@ -252,12 +252,22 @@ switch ($order) {
         break;
 
     default:
-        echo "Wrong options";
+        echo "<span class='order' style='color:red;'>!!! Wrong options !!!</span></div>";
+} 
+echo "<p class='copyright'>&copy; 2021 zaserge@gmail.com</p>";
+
+
+function printProgress(string $s): void
+{
+    echo "<li>", explode(DIRECTORY_SEPARATOR, $s)[0], "</li>";
+    ob_flush();
+    flush();
 }
 
 
-function walkByScenes($configData)
+function walkByScenes(): array
 {
+    global $configData;
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
@@ -273,8 +283,9 @@ function walkByScenes($configData)
 }
 
 
-function walkByVendorsScenes($configData): array
+function walkByVendorsScenes(): array
 {
+    global $configData;
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
@@ -291,8 +302,9 @@ function walkByVendorsScenes($configData): array
 }
 
 
-function walkByDates($configData)
+function walkByDates(): array
 {
+    global $configData;
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
@@ -308,8 +320,9 @@ function walkByDates($configData)
 }
 
 
-function walkByVendorsDates($configData): array
+function walkByVendorsDates(): array
 {
+    global $configData;
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
