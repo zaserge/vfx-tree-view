@@ -1,7 +1,7 @@
 body {
-	margin-left: 100px;
-	width: 700px;
 	font-family: sans-serif;
+	width: 700px;
+	margin: auto;
 }
 #getlist {
     font-size: 1.2em;

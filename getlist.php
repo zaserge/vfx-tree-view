@@ -1,9 +1,13 @@
 <?php
 
+$version = "1.0.2";
+
 header('Cache-Control: no-cache');
 header('Content-type: text/html; charset=utf-8');
 
 mb_internal_encoding("UTF-8");
+
+$start = microtime(true);
 
 $configData = yaml_parse_file(__DIR__ . '/config.yaml');
 if ($configData == false) {
@@ -254,7 +258,9 @@ switch ($order) {
     default:
         echo "<span class='order' style='color:red;'>!!! Wrong options !!!</span></div>";
 } 
-echo "<p class='copyright'>&copy; 2021 zaserge@gmail.com</p>";
+$time_elapsed_secs = microtime(true) - $start;
+echo "<p class='copyright'>&copy; 2021 zaserge@gmail.com, v", $version,
+    ".&nbsp;&nbsp;&nbsp;Finished in ", number_format($time_elapsed_secs, 3), " sec.</p>";
 
 
 function printProgress(string $s): void
