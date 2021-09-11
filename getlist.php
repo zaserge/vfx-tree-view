@@ -203,7 +203,7 @@ switch ($order) {
             echo "<div class='li-content'>";
             echo "<ul class='listscenes'>";
 
-            krsort($scenelist, SORT_STRING | SORT_FLAG_CASE);
+            ksort($scenelist, SORT_STRING | SORT_FLAG_CASE);
             foreach ($scenelist as $date => $data) {
                 echo "\n<li class='scene'>";
                 $c = count($data);
@@ -355,8 +355,7 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList): void
             $m = false;
             foreach ($reTypes as $re) {
                 if (preg_match($re['re'], $item, $matches)) {
-                    array_push(
-                        $shotList[$date],
+                    $shotList[$date][$item . $date] =
                         [
                             "shot" => $item,
                             "scene" => $matches['scene'],
@@ -364,15 +363,13 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList): void
                             "vendor" => $vendor,
                             "date" => $date,
                             "status" => $re['type']
-                        ]
-                    );
+                        ];
                     $m = true;
                     break;
                 }
             }
             if (!$m) {
-                array_push(
-                    $shotList[$date],
+                $shotList[$date][$item . $date] =
                     [
                         "shot" => $item,
                         "scene" => false,
@@ -380,8 +377,7 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList): void
                         "vendor" => $vendor,
                         "date" => $date,
                         "status" => 'unknown'
-                    ]
-                );
+                    ];
             }
         }
     }
@@ -404,8 +400,7 @@ function collectByScene(string $datePath, string $vendor, array &$list): void
                     if (!isset($list[$matches['scene']])) {
                         $list[$matches['scene']] = [];
                     }
-                    array_push(
-                        $list[$matches['scene']],
+                    $list[$matches['scene']][$item . $date] =
                         [
                             "shot" => $item,
                             "scene" => $matches['scene'],
@@ -413,8 +408,7 @@ function collectByScene(string $datePath, string $vendor, array &$list): void
                             "vendor" => $vendor,
                             "date" => $date,
                             "status" => $re['type']
-                        ]
-                    );
+                        ];
                     break;
                 }
             }
