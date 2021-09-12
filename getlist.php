@@ -49,13 +49,13 @@ switch ($order) {
                 }
                 echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                 echo "<span class='shotname'>", $shot['shot'];
-                echo "<div class='infotext'>";
 
+                echo "<div class='infotext'>";
                 echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
                 echo "<b>Date:</b> ", $shot['date'], "<br>";
                 echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-
                 echo "</div>"; # id='infotext'
+
                 echo "</span>";
                 echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], " ", $shot['date'], "</span>";
                 echo "</li>";
@@ -99,13 +99,13 @@ switch ($order) {
                 }
                 echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                 echo "<span class='shotname'>", $shot['shot'];
-                echo "<div class='infotext'>";
 
+                echo "<div class='infotext'>";
                 echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
                 echo "<b>Date:</b> ", $shot['date'], "<br>";
                 echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-
                 echo "</div>"; # id='infotext'
+
                 echo "</span>";
                 echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
                 echo "</li>";
@@ -159,13 +159,13 @@ switch ($order) {
                     }
                     echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                     echo "<span class='shotname'>", $shot['shot'];
-                    echo "<div class='infotext'>";
 
+                    echo "<div class='infotext'>";
                     echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
                     echo "<b>Date:</b> ", $shot['date'], "<br>";
                     echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-
                     echo "</div>"; # id='infotext'
+                    
                     echo "</span>";
                     echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
                     echo "</li>";
@@ -225,13 +225,13 @@ switch ($order) {
                     }
                     echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
                     echo "<span class='shotname'>", $shot['shot'];
+ 
                     echo "<div class='infotext'>";
-
                     echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
                     echo "<b>Date:</b> ", $shot['date'], "<br>";
                     echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-
                     echo "</div>"; # id='infotext'
+
                     echo "</span>";
                     echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
                     echo "</li>";

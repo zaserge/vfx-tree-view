@@ -1,10 +1,13 @@
 body {
 	font-family: sans-serif;
-	width: 700px;
+	width: 800px;
 	margin: auto;
+ 	background-color: #DDD; 
 }
 #getlist {
+ 	background-color: white; 
     font-size: 1.2em;
+	padding: 30px;
 }
 .listscenes {
 	font-weight: bold;
@@ -66,16 +69,20 @@ body {
 	color: red;
 	font-size: 1.5em;
 }
-.shotname .infotext {
+.infotext {
 	font-size: 0.7em;
+	opacity: 0.85;
 	padding: 15px;
 	visibility: hidden;
 	width: 500px;
 	border: 1px solid black;
 	position: absolute;
 	z-index: 1;
-	left: 300px;
+	left: 50px;
 	background-color: white;
+}
+.shotname {
+	position: relative;
 }
 .shotname:hover .infotext {
 	visibility: visible;
@@ -104,10 +111,11 @@ body {
 	background-color: rgb(240, 240, 240);
 }
 .buttons {
-    position: fixed ;
+    position: fixed;
     z-index: 1;
     left: auto;
-    top: 20px;
+	width: auto;
+	margin: 30px;
 }
 .button {
     display: inline-block;
