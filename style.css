@@ -1,43 +1,42 @@
 body {
-	font-family: sans-serif;
-	width: 800px;
-	margin: auto;
- 	background-color: #DDD; 
+  font-family: sans-serif;
+  width: 800px;
+  margin: auto;
+  background-color: #DDD; 
 }
 #getlist {
- 	background-color: white; 
-    font-size: 1.2em;
-	padding: 30px;
+  background-color: white; 
+  font-size: 1.2em;
+  padding: 30px;
 }
 .listscenes {
-	font-weight: bold;
-	list-style-image: url(images/clapperboard.png);
+  font-weight: bold;
+  list-style-image: url(images/clapperboard.png);
 }         
 .listdates {
-	font-weight: bold;
-	list-style-image: url(images/calendar.png);
+  font-weight: bold;
+  list-style-image: url(images/calendar.png);
 } 
 .listvendors {
-	font-weight: bold;
-	list-style-image: url(images/vendor.png);
+  font-weight: bold;
+  list-style-image: url(images/vendor.png);
 } 
 .toggleitem {
-	cursor: pointer;
-	padding: 5px;
+  cursor: pointer;
+  padding: 5px;
 }
 .listshots {
-	font-family: monospace;
-	font-weight: normal;
-/*	font-size: 1.2em;  */
-	list-style-type: square;
-	list-style-image: none;
+  font-family: monospace;
+  font-weight: normal;
+  list-style-type: square;
+  list-style-image: none;
 }
 .active, .toggleitem:hover {
-	background-color: #DDD;
+  background-color: #DDD;
 }
 .li-content {
-	display: none;
-	background-color: #EEE;
+  display: none;
+  background-color: #EEE;
 }
 .raw1 {
     background-color: #EEE;
@@ -46,97 +45,97 @@ body {
     background-color: #DDD;
 }
 .count {
-	font-size: 0.6em;
-	font-weight: normal;
-	margin-left: 3em;
+  font-size: 0.6em;
+  font-weight: normal;
+  margin-left: 3em;
 }
 .valid::marker {
-	color: green;
-	font-size: 1.5em;
+  color: green;
+  font-size: 1.5em;
 }
 .warn::marker {
-	color: yellow;
-	font-size: 1.5em;
+  color: yellow;
+  font-size: 1.5em;
 }
 .unknown::marker {
-	color: red;
-	font-size: 1.5em;
+  color: red;
+  font-size: 1.5em;
 }
 .infotext {
-	font-size: 0.7em;
-	padding: 15px;
-	visibility: hidden;
-	width: 500px;
-	border: 1px solid black;
-	position: absolute;
-	z-index: 1;
-	left: 50px;
-	background-color: white;
+  font-size: 0.7em;
+  padding: 15px;
+  visibility: hidden;
+  width: 500px;
+  border: 1px solid black;
+  position: absolute;
+  z-index: 1;
+  left: 50px;
+  background-color: white;
 }
 .shotname {
-	position: relative;
-	padding: 3px;
-	cursor: pointer;
+  position: relative;
+  padding: 3px;
+  cursor: pointer;
 }
 .shotname:hover .infotext {
-	visibility: visible;
-	background-color: rgb(233, 226, 203);
+  visibility: visible;
+  background-color: rgb(233, 226, 203);
 }
 .shot {
-	font-size: 1.6em;
-	font-weight: bold;
+  font-size: 1.6em;
+  font-weight: bold;
 }
 .briefinfo {
-	padding: 20px;  
-	font-size: 1em; 
-	color: silver;
-	display: none;
+  padding: 20px;  
+  font-size: 1em; 
+  color: silver;
+  display: none;
 }
 .timestamp {
-	text-align: right;
-	font-weight: bold;
-	font-size: 0.833em;
-	padding: 5px;
-	background-color: rgb(240, 240, 240);
+  text-align: right;
+  font-weight: bold;
+  font-size: 0.833em;
+  padding: 5px;
+  background-color: rgb(240, 240, 240);
 }
 .order {
-	float: left;
+  float: left;
 }
 .total {
-	text-align: right;
-	font-weight: bold;
-	font-size: 0.833em;
-	padding: 5px;
-	background-color: rgb(240, 240, 240);
+  text-align: right;
+  font-weight: bold;
+  font-size: 0.833em;
+  padding: 5px;
+  background-color: rgb(240, 240, 240);
 }
 .buttons {
-    position: fixed;
-    z-index: 1;
-    left: auto;
-	width: auto;
-	margin: 30px;
+  position: fixed;
+  z-index: 1;
+  left: auto;
+  width: auto;
+  margin: 30px;
 }
 .button {
-    display: inline-block;
-    padding: 5px;
-    margin: 5px;
-    background-color: gainsboro;
-    color: black;
+  display: inline-block;
+  padding: 5px;
+  margin: 5px;
+  background-color: gainsboro;
+  color: black;
 }
 a:link, a:visited {
-    color: black;
-    text-decoration: none;
+  color: black;
+  text-decoration: none;
 }
 a:hover {
-    color: black;
-    background-color: coral;
-    text-decoration: none;
+  color: black;
+  background-color: coral;
+  text-decoration: none;
 }
 .toptitle {
-    padding-top: 70px;
+  padding-top: 70px;
 }
 .copyright {
-	font-size: 0.7em;
-	color: darkgrey;
-	text-align: center;
+  font-size: 0.7em;
+  color: darkgrey;
+  text-align: center;
 }

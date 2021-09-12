@@ -10,7 +10,7 @@ httpRequest.onprogress = function (event) {
 }
 
 httpRequest.onload = function () {
-    if (httpRequest.readyState == httpRequest.DONE && httpRequest.status == 200) {
+    if (httpRequest.readyState === httpRequest.DONE && httpRequest.status === 200) {
         document.getElementById('progress').style.display = 'none';
         document.title = document.getElementById('title').textContent;
         setEventHandlers();
