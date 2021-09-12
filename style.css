@@ -2,65 +2,81 @@ body {
   font-family: sans-serif;
   width: 800px;
   margin: auto;
-  background-color: #DDD; 
+  background-color: #ddd;
 }
+
 #getlist {
-  background-color: white; 
+  background-color: white;
   font-size: 1.2em;
   padding: 30px;
 }
+
 .listscenes {
   font-weight: bold;
   list-style-image: url(images/clapperboard.png);
-}         
+}
+
 .listdates {
   font-weight: bold;
   list-style-image: url(images/calendar.png);
-} 
+}
+
 .listvendors {
   font-weight: bold;
   list-style-image: url(images/vendor.png);
-} 
+}
+
 .toggleitem {
   cursor: pointer;
   padding: 5px;
 }
+
 .listshots {
   font-family: monospace;
   font-weight: normal;
   list-style-type: square;
   list-style-image: none;
 }
-.active, .toggleitem:hover {
-  background-color: #DDD;
+
+.active,
+.toggleitem:hover {
+  background-color: #ddd;
 }
+
 .li-content {
   display: none;
-  background-color: #EEE;
+  background-color: #eee;
 }
+
 .raw1 {
-    background-color: #EEE;
+  background-color: #eee;
 }
+
 .raw2 {
-    background-color: #DDD;
+  background-color: #ddd;
 }
+
 .count {
   font-size: 0.6em;
   font-weight: normal;
   margin-left: 3em;
 }
+
 .valid::marker {
   color: green;
   font-size: 1.5em;
 }
+
 .warn::marker {
   color: yellow;
   font-size: 1.5em;
 }
+
 .unknown::marker {
   color: red;
   font-size: 1.5em;
 }
+
 .infotext {
   font-size: 0.7em;
   padding: 15px;
@@ -72,25 +88,30 @@ body {
   left: 50px;
   background-color: white;
 }
+
 .shotname {
   position: relative;
   padding: 3px;
   cursor: pointer;
 }
+
 .shotname:hover .infotext {
   visibility: visible;
   background-color: rgb(233, 226, 203);
 }
+
 .shot {
   font-size: 1.6em;
   font-weight: bold;
 }
+
 .briefinfo {
-  padding: 20px;  
-  font-size: 1em; 
+  padding: 20px;
+  font-size: 1em;
   color: silver;
   display: none;
 }
+
 .timestamp {
   text-align: right;
   font-weight: bold;
@@ -98,9 +119,11 @@ body {
   padding: 5px;
   background-color: rgb(240, 240, 240);
 }
+
 .order {
   float: left;
 }
+
 .total {
   text-align: right;
   font-weight: bold;
@@ -108,6 +131,7 @@ body {
   padding: 5px;
   background-color: rgb(240, 240, 240);
 }
+
 .buttons {
   position: fixed;
   z-index: 1;
@@ -115,6 +139,7 @@ body {
   width: auto;
   margin: 30px;
 }
+
 .button {
   display: inline-block;
   padding: 5px;
@@ -122,18 +147,23 @@ body {
   background-color: gainsboro;
   color: black;
 }
-a:link, a:visited {
+
+a:link,
+a:visited {
   color: black;
   text-decoration: none;
 }
+
 a:hover {
   color: black;
   background-color: coral;
   text-decoration: none;
 }
+
 .toptitle {
   padding-top: 70px;
 }
+
 .copyright {
   font-size: 0.7em;
   color: darkgrey;
