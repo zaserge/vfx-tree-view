@@ -429,20 +429,21 @@ function collectByScene(string $datePath, string $vendor, array &$list): void
 function printShot(array $shot, bool $row): void
 {
     global $configData;
+?>
+    <?= "<li class='", ($row ? "raw1" : "raw2"), " ", $shot['status'], "'>" ?>
+    <?= "<span class='shotname'>", $shot['shot']  ?>
 
-    echo "<li class='", ($row ? "raw1" : "raw2"), " ", $shot['status'], "'>";
-    echo "<span class='shotname'>", $shot['shot'];
+    <?= "<div class='infotext'>" ?>
+    <?= "<span class='shot'>", $shot['shot'], "</span>" ?>
+    <?= "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>" ?>
+    <?= "<b>Date:</b> ", $shot['date'], "<br>" ?>
+    <?= "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p" ?>
+    <?= "</div>" ?>
 
-    echo "<div class='infotext'>";
-    echo "<span class='shot'>", $shot['shot'], "</span>";
-    echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
-    echo "<b>Date:</b> ", $shot['date'], "<br>";
-    echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-    echo "</div>"; # id='infotext'
-
-    echo "</span>";
-    echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
-    echo "</li>";
+    <?= "</span>" ?>
+    <?= "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>" ?>
+    <?= "</li>" ?>
+<?php
 }
 
 ?>
