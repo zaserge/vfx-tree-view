@@ -377,7 +377,6 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList): void
             }
         }
     }
-    return;
 }
 
 
@@ -418,7 +417,6 @@ function collectByScene(string $datePath, string $vendor, array &$list): void
             }
         }
     }
-    return;
 }
 
 /**

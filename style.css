@@ -35,13 +35,6 @@ body {
 .active, .toggleitem:hover {
 	background-color: #DDD;
 }
-.shotname {
-	padding: 3px;
-	cursor: pointer;
-}
-.shotname:hover {
-	background-color: #DDD;
-}
 .li-content {
 	display: none;
 	background-color: #EEE;
@@ -71,7 +64,6 @@ body {
 }
 .infotext {
 	font-size: 0.7em;
-	opacity: 0.85;
 	padding: 15px;
 	visibility: hidden;
 	width: 500px;
@@ -83,13 +75,16 @@ body {
 }
 .shotname {
 	position: relative;
+	padding: 3px;
+	cursor: pointer;
+}
+.shotname:hover .infotext {
+	visibility: visible;
+	background-color: rgb(233, 226, 203);
 }
 .shot {
 	font-size: 1.6em;
 	font-weight: bold;
-}
-.shotname:hover .infotext {
-	visibility: visible;
 }
 .briefinfo {
 	padding: 20px;  
