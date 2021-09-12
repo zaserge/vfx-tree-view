@@ -1,6 +1,6 @@
 <?php
 
-const VERSION = "1.1";
+const VERSION = "1.2";
 
 const DATE_MATCH_MARK = "#";
 const DATE_MATCH_EXPR = "[0-9]*";
@@ -219,11 +219,11 @@ switch ($order) {
 
     default:
         echo "<span class='order' style='color:red;'>!!! Wrong options !!!</span></div>";
-} 
+}
 $time_elapsed_secs = microtime(true) - $start;
 echo "<p class='copyright'>&copy; 2021 zaserge@gmail.com, v", VERSION,
-    ".&nbsp;&nbsp;&nbsp;Finished in ", number_format($time_elapsed_secs, 3), " sec. Memory usage: ", 
-    round(memory_get_peak_usage(true) / 1048576, 2), " MB.</p>";
+".&nbsp;&nbsp;&nbsp;Finished in ", number_format($time_elapsed_secs, 3), " sec. Memory usage: ",
+round(memory_get_peak_usage(true) / 1048576, 2), " MB.</p>";
 
 
 /**
@@ -256,7 +256,7 @@ function walkByScenes(): array
         printVendorInProgress($vendor);
 
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
-        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR 
+        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
             . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
 
         foreach (glob($vendorDir,  GLOB_ONLYDIR) as $datePath) {
@@ -284,7 +284,7 @@ function walkByVendorsScenes(): array
 
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
         $shotList[$vendor] = [];
-        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR 
+        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
             . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
 
         foreach (glob($vendorDir, GLOB_ONLYDIR) as $datePath) {
@@ -311,7 +311,7 @@ function walkByDates(): array
         printVendorInProgress($vendor);
 
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
-        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR 
+        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
             . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
 
         foreach (glob($vendorDir,  GLOB_ONLYDIR) as $datePath) {
@@ -339,7 +339,7 @@ function walkByVendorsDates(): array
 
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
         $shotList[$vendor] = [];
-        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR 
+        $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
             . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
 
         foreach (glob($vendorDir,  GLOB_ONLYDIR) as $datePath) {
@@ -504,5 +504,3 @@ function getDateNthDir(string $path, int $nth): string
     }
     return substr(explode(DIRECTORY_SEPARATOR, substr($path, $i + 1, $len))[0], 0, DATE_MATCH_LEN);
 }
-
-?>
