@@ -120,17 +120,17 @@ switch ($order) {
             echo "<ul class='listdates'>";
 
             krsort($datelist, SORT_STRING | SORT_FLAG_CASE);
-            foreach ($datelist as $date => $data) {
+            foreach ($datelist as $date => $shots) {
                 echo "\n<li class='date'>";
-                $c = count($data);
+                $c = count($shots);
                 echo "<div class='toggleitem'>", $date, "<span class='count'>", $c, ($c > 1 ? " shots" : " shot"), "</span></div>";
 
                 echo "<div class='li-content'>";
                 echo "<ul class='listshots'>";
-                ksort($data, SORT_STRING | SORT_FLAG_CASE);
+                ksort($shots, SORT_STRING | SORT_FLAG_CASE);
                 $index = "";
                 $rowclass = false;
-                foreach ($data as $shot) {
+                foreach ($shots as $shot) {
                     if (strcmp($index, $shot['index']) != 0) {
                         $index = $shot['index'];
                         $rowclass = !$rowclass;
@@ -175,17 +175,17 @@ switch ($order) {
             echo "<ul class='listscenes'>";
 
             ksort($scenelist, SORT_STRING | SORT_FLAG_CASE);
-            foreach ($scenelist as $date => $data) {
+            foreach ($scenelist as $scene => $shots) {
                 echo "\n<li class='scene'>";
-                $c = count($data);
-                echo "<div class='toggleitem'>", $date, "<span class='count'>", $c, ($c > 1 ? " shots" : " shot"), "</span></div>";
+                $c = count($shots);
+                echo "<div class='toggleitem'>", $scene, "<span class='count'>", $c, ($c > 1 ? " shots" : " shot"), "</span></div>";
 
                 echo "<div class='li-content'>";
                 echo "<ul class='listshots'>";
-                ksort($data, SORT_STRING | SORT_FLAG_CASE);
+                ksort($shots, SORT_STRING | SORT_FLAG_CASE);
                 $index = "";
                 $rowclass = false;
-                foreach ($data as $shot) {
+                foreach ($shots as $shot) {
                     if (strcmp($index, $shot['index']) != 0) {
                         $index = $shot['index'];
                         $rowclass = !$rowclass;
