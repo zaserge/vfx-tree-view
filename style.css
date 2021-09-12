@@ -84,6 +84,10 @@ body {
 .shotname {
 	position: relative;
 }
+.shot {
+	font-size: 1.6em;
+	font-weight: bold;
+}
 .shotname:hover .infotext {
 	visibility: visible;
 }

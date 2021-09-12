@@ -1,6 +1,6 @@
 <?php
 
-$version = "1.0.2";
+$version = "1.1";
 
 header('Cache-Control: no-cache');
 header('Content-type: text/html; charset=utf-8');
@@ -16,7 +16,7 @@ if ($configData == false) {
 }
 
 date_default_timezone_set($configData['timezone']);
-echo "<h2 class='toptitle'>", $configData['title'], "</h2>";
+echo "<h2 id='title' class='toptitle'>", $configData['title'], "</h2>";
 echo "<div class='timestamp'>", date("F j, Y, H:i:s T");
 
 $order = $_GET['order'];
@@ -47,18 +47,7 @@ switch ($order) {
                     $index = $shot['index'];
                     $rowclass = !$rowclass;
                 }
-                echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
-                echo "<span class='shotname'>", $shot['shot'];
-
-                echo "<div class='infotext'>";
-                echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
-                echo "<b>Date:</b> ", $shot['date'], "<br>";
-                echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-                echo "</div>"; # id='infotext'
-
-                echo "</span>";
-                echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], " ", $shot['date'], "</span>";
-                echo "</li>";
+                printShot($shot, $rowclass);
             }
             echo "</ul>"; # id='listshots'  
             echo "</div>"; # id='li-content'
@@ -97,18 +86,7 @@ switch ($order) {
                     $index = $shot['index'];
                     $rowclass = !$rowclass;
                 }
-                echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
-                echo "<span class='shotname'>", $shot['shot'];
-
-                echo "<div class='infotext'>";
-                echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
-                echo "<b>Date:</b> ", $shot['date'], "<br>";
-                echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-                echo "</div>"; # id='infotext'
-
-                echo "</span>";
-                echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
-                echo "</li>";
+                printShot($shot, $rowclass);
             }
             echo "</ul>"; # id='listshots'     
             echo "</div>"; # id='li-content'  
@@ -157,18 +135,7 @@ switch ($order) {
                         $index = $shot['index'];
                         $rowclass = !$rowclass;
                     }
-                    echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
-                    echo "<span class='shotname'>", $shot['shot'];
-
-                    echo "<div class='infotext'>";
-                    echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
-                    echo "<b>Date:</b> ", $shot['date'], "<br>";
-                    echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-                    echo "</div>"; # id='infotext'
-                    
-                    echo "</span>";
-                    echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
-                    echo "</li>";
+                    printShot($shot, $rowclass);
                 }
                 echo "</ul>"; # id='listshots'     
                 echo "</div>"; # id='li-content'  
@@ -223,18 +190,7 @@ switch ($order) {
                         $index = $shot['index'];
                         $rowclass = !$rowclass;
                     }
-                    echo "<li class='", ($rowclass ? "raw1" : "raw2"), " ", $shot['status'], "'>";
-                    echo "<span class='shotname'>", $shot['shot'];
- 
-                    echo "<div class='infotext'>";
-                    echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
-                    echo "<b>Date:</b> ", $shot['date'], "<br>";
-                    echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
-                    echo "</div>"; # id='infotext'
-
-                    echo "</span>";
-                    echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
-                    echo "</li>";
+                    printShot($shot, $rowclass);
                 }
                 echo "</ul>"; # id='listshots'     
                 echo "</div>"; # id='li-content'  
@@ -263,6 +219,12 @@ echo "<p class='copyright'>&copy; 2021 zaserge@gmail.com, v", $version,
     ".&nbsp;&nbsp;&nbsp;Finished in ", number_format($time_elapsed_secs, 3), " sec.</p>";
 
 
+/**
+ * printProgress
+ *
+ * @param  mixed $s
+ * @return void
+ */
 function printProgress(string $s): void
 {
     echo "<li>", explode(DIRECTORY_SEPARATOR, $s)[0], "</li>";
@@ -271,6 +233,11 @@ function printProgress(string $s): void
 }
 
 
+/**
+ * walkByScenes
+ *
+ * @return array
+ */
 function walkByScenes(): array
 {
     global $configData;
@@ -289,6 +256,11 @@ function walkByScenes(): array
 }
 
 
+/**
+ * walkByVendorsScenes
+ *
+ * @return array
+ */
 function walkByVendorsScenes(): array
 {
     global $configData;
@@ -308,6 +280,11 @@ function walkByVendorsScenes(): array
 }
 
 
+/**
+ * walkByDates
+ *
+ * @return array
+ */
 function walkByDates(): array
 {
     global $configData;
@@ -326,6 +303,11 @@ function walkByDates(): array
 }
 
 
+/**
+ * walkByVendorsDates
+ *
+ * @return array
+ */
 function walkByVendorsDates(): array
 {
     global $configData;
@@ -345,6 +327,14 @@ function walkByVendorsDates(): array
 }
 
 
+/**
+ * collectByDate
+ *
+ * @param  mixed $datePath
+ * @param  mixed $vendor
+ * @param  mixed $shotList
+ * @return void
+ */
 function collectByDate(mixed $datePath, string $vendor, array &$shotList): void
 {
     global $configData;
@@ -391,6 +381,14 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList): void
 }
 
 
+/**
+ * collectByScene
+ *
+ * @param  mixed $datePath
+ * @param  mixed $vendor
+ * @param  mixed $list
+ * @return void
+ */
 function collectByScene(string $datePath, string $vendor, array &$list): void
 {
     global $configData;
@@ -421,6 +419,32 @@ function collectByScene(string $datePath, string $vendor, array &$list): void
         }
     }
     return;
+}
+
+/**
+ * printShot
+ *
+ * @param  mixed $shot
+ * @param  mixed $row
+ * @return void
+ */
+function printShot(array $shot, bool $row): void
+{
+    global $configData;
+
+    echo "<li class='", ($row ? "raw1" : "raw2"), " ", $shot['status'], "'>";
+    echo "<span class='shotname'>", $shot['shot'];
+
+    echo "<div class='infotext'>";
+    echo "<span class='shot'>", $shot['shot'], "</span>";
+    echo "<p><b>Vendor:</b> ", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "<br>";
+    echo "<b>Date:</b> ", $shot['date'], "<br>";
+    echo "<b>Path:</b> ", $configData['vendordir'], DIRECTORY_SEPARATOR, $shot['vendor'], DIRECTORY_SEPARATOR, $shot['date'], "</p";
+    echo "</div>"; # id='infotext'
+
+    echo "</span>";
+    echo "<span class='briefinfo'>", explode(DIRECTORY_SEPARATOR, $shot['vendor'])[0], "</span>";
+    echo "</li>";
 }
 
 ?>
