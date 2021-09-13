@@ -372,8 +372,8 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList, int $o
     }
 
     foreach (scandir($datePath) as $item) {
-        if ($item[0] != ".") {
-            $m = false;
+        if ($item[0] != "." && is_dir($datePath . DIRECTORY_SEPARATOR . $item)) {
+            $match = false;
             foreach ($reTypes as $re) {
                 if (preg_match($re['re'], $item, $matches)) {
                     $shotList[$date][$item . $date] =
@@ -386,11 +386,11 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList, int $o
                             "path" => $datePath,
                             "status" => $re['type']
                         ];
-                    $m = true;
+                    $match = true;
                     break;
                 }
             }
-            if (!$m) {
+            if (!$match) {
                 $shotList[$date][$item . $date] =
                     [
                         "shot" => $item,
@@ -424,7 +424,7 @@ function collectByScene(string $datePath, string $vendor, array &$list, int $off
     $date = getDateNthDir($datePath, $offset);
 
     foreach (scandir($datePath) as $item) {
-        if ($item[0] != ".") {
+        if ($item[0] != "." && is_dir($datePath . DIRECTORY_SEPARATOR . $item)) {
             foreach ($reTypes as $re) {
                 if (preg_match($re['re'], $item, $matches)) {
                     $matches['scene'] = strtoupper($matches['scene']);
