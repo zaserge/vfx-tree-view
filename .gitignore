@@ -2,4 +2,4 @@ data/
 Vault/
 .DS_Store
 *.bak
-*.copy
+config.yaml
