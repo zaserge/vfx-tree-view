@@ -6,6 +6,10 @@ const DATE_MATCH_MARK = "#";
 const DATE_MATCH_EXPR = "[0-9]*";
 const DATE_MATCH_LEN = 8;
 
+const MAX_YAML_SIZE = 102400;
+
+error_reporting(E_ALL ^ E_WARNING);
+
 header('Cache-Control: no-cache');
 header('Content-type: text/html; charset=utf-8');
 
@@ -13,10 +17,11 @@ mb_internal_encoding("UTF-8");
 
 $start = microtime(true);
 
-$configData = yaml_parse_file(__DIR__ . '/config.yaml');
-if ($configData == false) {
-    echo "No config files";
-    exit(-1);
+$configFileName = __DIR__ . DIRECTORY_SEPARATOR . 'config.yaml';
+$configData = yaml_parse_file($configFileName);
+if ($configData === false) {
+    echo "<b>ERROR:</b> No config file found: <u>", $configFileName, "</u>";
+    exit(0);
 }
 
 // normalize all path's
@@ -29,6 +34,11 @@ array_walk($configData['vendors'], 'normalize');
 
 $configData['vault'] =  truepath($configData['vault'], false, false);
 
+if(! is_dir($configData['vault'])) {
+    echo "<b>ERROR:</b> No Vault path exists: <u>", $configData['vault'], "</u>";
+    exit(0);
+}
+
 $vaultNumDirs = countDirsOffset($configData['vault']);
 
 date_default_timezone_set($configData['timezone']);
@@ -36,6 +46,8 @@ echo "<h2 id='title' class='toptitle'>", $configData['title'], "</h2>";
 echo "<div class='timestamp'>", date("F j, Y, H:i:s T");
 
 $order = $_GET['order'];
+
+$noerrors = true;
 
 switch ($order) {
     case 'scene':
@@ -134,6 +146,9 @@ echo "<p class='copyright'>&copy; 2021 zaserge@gmail.com, v", VERSION,
 ".&nbsp;&nbsp;&nbsp;Finished in ", number_format($time_elapsed_secs, 3), " sec. Memory usage: ",
 round(memory_get_peak_usage(true) / 1048576, 2), " MB.</p>";
 
+if ($noerrors) {
+    echo "<div id='done'></div>";
+}
 
 /**
  * printProgress
@@ -141,9 +156,9 @@ round(memory_get_peak_usage(true) / 1048576, 2), " MB.</p>";
  * @param  mixed $s
  * @return void
  */
-function printVendorInProgress(string $str): void
+function printVendorInProgress(string $str, ?string $opt = ""): void
 {
-    echo "<li>", explode(DIRECTORY_SEPARATOR, $str)[0], "</li>";
+    echo "<li>", explode(DIRECTORY_SEPARATOR, $str)[0], " &#8594; ", $opt, "</li>";
     ob_flush();
     flush();
 }
@@ -158,19 +173,27 @@ function walkByScenes(): array
 {
     global $configData;
     global $vaultNumDirs;
+    global $noerrors;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        printVendorInProgress($vendor);
-
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
 
-        foreach (glob($vendorDir,  GLOB_ONLYDIR) as $datePath) {
+        $list = glob($vendorDir, GLOB_ONLYDIR);
+        if (count($list) == 0) {
+            $noerrors = false;
+            printVendorInProgress($vendor, "vendor path not found");
+            echo "<pre>", $vendorDir, "</pre>";
+            continue;
+        }
+
+        foreach ($list as $datePath) {
             collectByScene($datePath, $vendor, $shotList, $offset);
         }
+        printVendorInProgress($vendor, "done");
     }
     return ($shotList);
 }
@@ -185,20 +208,28 @@ function walkByVendorsScenes(): array
 {
     global $configData;
     global $vaultNumDirs;
+    global $noerrors;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        printVendorInProgress($vendor);
-
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
         $shotList[$vendor] = [];
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
 
-        foreach (glob($vendorDir, GLOB_ONLYDIR) as $datePath) {
+        $list = glob($vendorDir, GLOB_ONLYDIR);
+        if (count($list) == 0) {
+            $noerrors = false;
+            printVendorInProgress($vendor, "vendor path not found");
+            echo "<pre>", $vendorDir, "</pre>";
+            continue;
+        }
+
+        foreach ($list as $datePath) {
             collectByScene($datePath, $vendor, $shotList[$vendor], $offset);
         }
+        printVendorInProgress($vendor, "ok");
     }
     return ($shotList);
 }
@@ -213,19 +244,27 @@ function walkByDates(): array
 {
     global $configData;
     global $vaultNumDirs;
+    global $noerrors;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        printVendorInProgress($vendor);
-
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
 
-        foreach (glob($vendorDir,  GLOB_ONLYDIR) as $datePath) {
+        $list = glob($vendorDir, GLOB_ONLYDIR);
+        if (count($list) == 0) {
+            $noerrors = false;
+            printVendorInProgress($vendor, "vendor path not found");
+            echo "<pre>", $vendorDir, "</pre>";
+            continue;
+        }
+
+        foreach ($list as $datePath) {
             collectByDate($datePath, $vendor, $shotList, $offset);
         }
+        printVendorInProgress($vendor, "done");
     }
     return ($shotList);
 }
@@ -240,20 +279,28 @@ function walkByVendorsDates(): array
 {
     global $configData;
     global $vaultNumDirs;
+    global $noerrors;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        printVendorInProgress($vendor);
-
         $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
         $shotList[$vendor] = [];
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor) . DIRECTORY_SEPARATOR;
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
 
-        foreach (glob($vendorDir,  GLOB_ONLYDIR) as $datePath) {
+        $list = glob($vendorDir, GLOB_ONLYDIR);
+        if (count($list) == 0) {
+            $noerrors = false;
+            printVendorInProgress($vendor, "vendor path not found");
+            echo "<pre>", $vendorDir, "</pre>";
+            continue;
+        }
+
+        foreach ($list as $datePath) {
             collectByDate($datePath, $vendor, $shotList[$vendor], $offset);
         }
+        printVendorInProgress($vendor, "done");
     }
     return ($shotList);
 }
@@ -268,7 +315,7 @@ function walkByVendorsDates(): array
  * @param  mixed $offset
  * @return void
  */
-function collectByDate(mixed $datePath, string $vendor, array &$shotList, int $offset): void
+function collectByDate(mixed $datePath, string $vendor, array &$list, int $offset): void
 {
     global $configData;
 
@@ -276,8 +323,8 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList, int $o
 
     $date = getDateNthDir($datePath, $offset);
 
-    if (!isset($shotList[$date])) {
-        $shotList[$date] = [];
+    if (!isset($list[$date])) {
+        $list[$date] = [];
     }
 
     foreach (scandir($datePath) as $item) {
@@ -285,7 +332,7 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList, int $o
             $match = false;
             foreach ($reTypes as $re) {
                 if (preg_match($re['re'], $item, $matches)) {
-                    $shotList[$date][$item . $date] =
+                    $list[$date][$item . $date] =
                         [
                             "shot" => $item,
                             "scene" => $matches['scene'],
@@ -300,7 +347,7 @@ function collectByDate(mixed $datePath, string $vendor, array &$shotList, int $o
                 }
             }
             if (!$match) {
-                $shotList[$date][$item . $date] =
+                $list[$date][$item . $date] =
                     [
                         "shot" => $item,
                         "scene" => false,
