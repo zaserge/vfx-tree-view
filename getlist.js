@@ -6,8 +6,7 @@ const httpRequest = new XMLHttpRequest();
 const elem = document.getElementById("getlist");
 
 httpRequest.onprogress = function (event) {
-    const response = event.currentTarget.response;
-    elem.innerHTML = response;
+    elem.innerHTML = event.currentTarget.response;
 };
 
 httpRequest.onload = function () {
