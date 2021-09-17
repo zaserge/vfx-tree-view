@@ -20,6 +20,7 @@ httpRequest.onload = function (event) {
 
     document.title = document.getElementById("title").textContent;
     const items = listContainer.getElementsByClassName("toggleitem");
+
     for (let item of items) {
       item.addEventListener("click", function () {
         this.classList.toggle("active");
