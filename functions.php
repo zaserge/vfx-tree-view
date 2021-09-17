@@ -1,6 +1,6 @@
 <?php
 
-const VERSION = "1.5";
+const VERSION = "1.5.1";
 
 const DATE_MATCH_MARK = "#";
 const DATE_MATCH_EXPR = "[0-9]*";
