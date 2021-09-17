@@ -8,7 +8,7 @@ body {
 #getlist {
   background-color: white;
   font-size: 1.2em;
-  padding: 30px;
+  padding: 100px 30px 30px 30px;
 }
 
 .listscenes {
@@ -161,7 +161,7 @@ a:hover {
 }
 
 .toptitle {
-  padding-top: 70px;
+  margin-top: 0;
 }
 
 .copyright {
