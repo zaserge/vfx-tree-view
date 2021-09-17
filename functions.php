@@ -1,6 +1,6 @@
 <?php
 
-const VERSION = "1.5";
+const VERSION = "1.5.1";
 
 const DATE_MATCH_MARK = "#";
 const DATE_MATCH_EXPR = "[0-9]*";
@@ -43,11 +43,10 @@ function printVendorInProgress(string $str, ?string $opt = ""): void
  *
  * @return array
  */
-function walkByScenes(): array
+function walkByScenes(array &$warnings): array
 {
     global $configData;
     global $vaultNumDirs;
-    global $noerrors;
 
     $shotList = [];
 
@@ -58,9 +57,8 @@ function walkByScenes(): array
 
         $list = glob($vendorDir, GLOB_ONLYDIR);
         if (count($list) == 0) {
-            $noerrors = false;
-            printVendorInProgress($vendor, "vendor path not found");
-            echo "<pre>", $vendorDir, "</pre>";
+            $warnings[] = "<b>NO DATES</b> are found for <b>" .
+                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
             continue;
         }
 
@@ -78,11 +76,10 @@ function walkByScenes(): array
  *
  * @return array
  */
-function walkByVendorsScenes(): array
+function walkByVendorsScenes(array &$warnings): array
 {
     global $configData;
     global $vaultNumDirs;
-    global $noerrors;
 
     $shotList = [];
 
@@ -94,9 +91,8 @@ function walkByVendorsScenes(): array
 
         $list = glob($vendorDir, GLOB_ONLYDIR);
         if (count($list) == 0) {
-            $noerrors = false;
-            printVendorInProgress($vendor, "vendor path not found");
-            echo "<pre>", $vendorDir, "</pre>";
+            $warnings[] = "<b>NO DATES</b> are found for <b>" .
+                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
             continue;
         }
 
@@ -114,11 +110,10 @@ function walkByVendorsScenes(): array
  *
  * @return array
  */
-function walkByDates(): array
+function walkByDates(array &$warnings): array
 {
     global $configData;
     global $vaultNumDirs;
-    global $noerrors;
 
     $shotList = [];
 
@@ -129,9 +124,8 @@ function walkByDates(): array
 
         $list = glob($vendorDir, GLOB_ONLYDIR);
         if (count($list) == 0) {
-            $noerrors = false;
-            printVendorInProgress($vendor, "vendor path not found");
-            echo "<pre>", $vendorDir, "</pre>";
+            $warnings[] = "<b>NO DATES</b> are found for <b>" .
+                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
             continue;
         }
 
@@ -149,11 +143,10 @@ function walkByDates(): array
  *
  * @return array
  */
-function walkByVendorsDates(): array
+function walkByVendorsDates(array &$warnings): array
 {
     global $configData;
     global $vaultNumDirs;
-    global $noerrors;
 
     $shotList = [];
 
@@ -165,9 +158,8 @@ function walkByVendorsDates(): array
 
         $list = glob($vendorDir, GLOB_ONLYDIR);
         if (count($list) == 0) {
-            $noerrors = false;
-            printVendorInProgress($vendor, "vendor path not found");
-            echo "<pre>", $vendorDir, "</pre>";
+            $warnings[] = "<b>NO DATES</b> are found for <b>" .
+                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
             continue;
         }
 

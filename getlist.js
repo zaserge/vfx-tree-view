@@ -14,25 +14,25 @@ httpRequest.onload = function (event) {
     httpRequest.readyState === httpRequest.DONE &&
     httpRequest.status === 200
   ) {
-    if (document.getElementById("done")) {
-      document.getElementById("progress").style.display = "none";
+    progressElem = document.getElementById("progress");
+    if(progressElem !== null) {
+      progressElem.style.display = "none";
+
+      document.title = document.getElementById("title").textContent;
+      const items = listContainer.getElementsByClassName("toggleitem");
+
+      for (let item of items) {
+        item.addEventListener("click", function () {
+          this.classList.toggle("active");
+          const content = this.nextElementSibling;
+          if (content.style.display === "block") {
+            content.style.display = "none";
+          } else {
+            content.style.display = "block";
+          }
+        });
+      }
     }
-
-    document.title = document.getElementById("title").textContent;
-    const items = listContainer.getElementsByClassName("toggleitem");
-
-    for (let item of items) {
-      item.addEventListener("click", function () {
-        this.classList.toggle("active");
-        const content = this.nextElementSibling;
-        if (content.style.display === "block") {
-          content.style.display = "none";
-        } else {
-          content.style.display = "block";
-        }
-      });
-    }
-
   }
 };
 

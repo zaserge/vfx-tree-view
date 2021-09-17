@@ -169,3 +169,12 @@ a:hover {
   color: darkgrey;
   text-align: center;
 }
+
+.warnings {
+  background-color: #fff6f1;;
+  font-size: 0.8em;
+}
+
+.errors {
+  color: red;
+}
