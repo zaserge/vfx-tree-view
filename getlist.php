@@ -14,7 +14,9 @@ $start = microtime(true);
 $configFileName = __DIR__ . DIRECTORY_SEPARATOR . 'config.yaml';
 $configData = yaml_parse_file($configFileName);
 if ($configData === false) {
+    echo "<ul class='errors'>";
     echo "<b>ERROR:</b> No config file found: <u>", $configFileName, "</u>";
+    echo "</ul>";
     exit(0);
 }
 
@@ -22,7 +24,9 @@ array_walk($configData['vendors'], 'normalize');
 $configData['vault'] =  truepath($configData['vault'], false, false);
 
 if (! is_dir($configData['vault'])) {
+    echo "<ul class='errors'>";
     echo "<b>ERROR:</b> No Vault path exists: <u>", $configData['vault'], "</u>";
+    echo "</ul>";
     exit(0);
 }
 
@@ -34,15 +38,23 @@ echo "<div class='timestamp'>", date("F j, Y, H:i:s T");
 
 $order = $_GET['order'];
 
-$noerrors = true;
+$warnings = [];
 
 switch ($order) {
     case 'scene':
         echo "<span class='order'><img src='images/clapperboard.png'> SCENES</span></div>";
 
         echo "<ul id='progress'>";
-        $scenelist = walkByScenes();
+        $scenelist = walkByScenes($warnings);
         echo "</ul>"; # id='progress'
+
+        if (count($warnings) > 0) {
+            echo "<ul class='warnings'>";
+            foreach($warnings as $warn) {
+                echo "<li>", $warn, "</li>";
+            }
+            echo "</ul>\n";
+        }
 
         echo printSceneList($scenelist);
 
@@ -55,8 +67,16 @@ switch ($order) {
         echo "<span class='order'><img src='images/vendor.png'> VENDORS &#8594; SCENES</span></div>";
 
         echo "<ul id='progress'>";
-        $vendorlist = walkByVendorsScenes();
+        $vendorlist = walkByVendorsScenes($warnings);
         echo "</ul>"; # id='progress'
+
+        if (count($warnings) > 0) {
+            echo "<ul class='warnings'>";
+            foreach($warnings as $warn) {
+                echo "<li>", $warn, "</li>";
+            }
+            echo "</ul>\n";
+        }
 
         echo "<ul class='listvendors'>";
 
@@ -85,8 +105,16 @@ switch ($order) {
         echo "<span class='order'><img src='images/calendar.png'> DATES</span></div>";
 
         echo "<ul id='progress'>";
-        $datelist = walkByDates();
+        $datelist = walkByDates($warnings);
         echo "</ul>"; # id='progress'
+
+        if (count($warnings) > 0) {
+            echo "<ul class='warnings'>";
+            foreach($warnings as $warn) {
+                echo "<li>", $warn, "</li>";
+            }
+            echo "</ul>\n";
+        }
 
         echo printDateList($datelist);
 
@@ -99,8 +127,16 @@ switch ($order) {
         echo "<span class='order'><img src='images/vendor.png'> VENDORS &#8594; DATES</span></div>";
 
         echo "<ul id='progress'>";
-        $vendorlist = walkByVendorsDates();
+        $vendorlist = walkByVendorsDates($warnings);
         echo "</ul>"; # id='progress'
+
+        if (count($warnings) > 0) {
+            echo "<ul class='warnings'>";
+            foreach($warnings as $warn) {
+                echo "<li>", $warn, "</li>";
+            }
+            echo "</ul>\n";
+        }
 
         echo "<ul class='listvendors'>";
 
@@ -132,9 +168,5 @@ $time_elapsed_secs = microtime(true) - $start;
 echo "<p class='copyright'>&copy; 2021 zaserge@gmail.com, v", VERSION,
 ".&nbsp;&nbsp;&nbsp;Finished in ", number_format($time_elapsed_secs, 3), " sec. Memory usage: ",
 round(memory_get_peak_usage(true) / 1048576, 2), " MB.</p>";
-
-if ($noerrors) {
-    echo "<div id='done'></div>";
-}
 
 ?>
