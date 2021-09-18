@@ -1,10 +1,17 @@
 ---
  title: Great VFX list
  vendors:
-  - One/in/#
-  - Two/in/hires/#
-  - Three/in/*/#/EXR
-  - Four/in/#
+  -
+    name: One
+    path: One/in/#
+  -
+    name: Two
+    path: Two/in/hires/#
+  -
+    path: Three/in/*/#/EXR
+  -
+    name: Four
+    path: Four/in/#
  timezone: Europe/Moscow
  vault: /Path/to/Vault
  regexp:
@@ -14,4 +21,3 @@
     -
       re: /^(?P<scene>[A-Z]{3})_(?P<index>\d{4})(?:_(?P<rem>\w+))?$/iu
       type: warn
-

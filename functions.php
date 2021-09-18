@@ -1,15 +1,29 @@
 <?php
 
-const VERSION = "1.5.1";
+/*
+MIT License
 
-const DATE_MATCH_MARK = "#";
-const DATE_MATCH_EXPR = "[0-9]*";
-const DATE_MATCH_LEN = 8;
+Copyright (c) 2021 zaserge@gmail.com
 
-const MAX_YAML_SIZE = 102400;
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
+*/
 
 /**
  * normalize call-back
@@ -18,9 +32,12 @@ const MAX_YAML_SIZE = 102400;
  * @param  string $path
  * @return void
  */
-function normalize(string &$path): void
+function normalizePath(array &$vendor): void
 {
-    $path = truepath($path);
+    $vendor['path']= truepath($vendor['path']);
+    if (! isset($vendor['name'])) {
+        $vendor['name'] = explode(DIRECTORY_SEPARATOR, $vendor['path'])[0];
+    }
 }
 
 
@@ -30,9 +47,9 @@ function normalize(string &$path): void
  * @param  mixed $s
  * @return void
  */
-function printVendorInProgress(string $str, ?string $opt = ""): void
+function printVendorInProgress(string $vendorName, ?string $opt = ""): void
 {
-    echo "<li>", explode(DIRECTORY_SEPARATOR, $str)[0], " &#8594; ", $opt, "</li>";
+    echo "<li>", $vendorName, " &#8594; ", $opt, "</li>";
     ob_flush();
     flush();
 }
@@ -46,26 +63,24 @@ function printVendorInProgress(string $str, ?string $opt = ""): void
 function walkByScenes(array &$warnings): array
 {
     global $configData;
-    global $vaultNumDirs;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
+        $depth = countDirDepth($vendor['path']) + $configData['_vault_depth'] + 1;
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor['path']);
 
-        $list = glob($vendorDir, GLOB_ONLYDIR);
-        if (count($list) == 0) {
-            $warnings[] = "<b>NO DATES</b> are found for <b>" .
-                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
+        $dateList = glob($vendorDir, GLOB_ONLYDIR);
+        if (count($dateList) == 0) {
+            $warnings[] = "<b>NO DATES</b> are found for <b>" . $vendor['name'] . "</b> (" . $vendor['path'] . ")";
             continue;
         }
 
-        foreach ($list as $datePath) {
-            collectByScene($datePath, $vendor, $shotList, $offset);
+        foreach ($dateList as $date) {
+            collectByScene($date, $vendor['name'], $shotList, $depth);
         }
-        printVendorInProgress($vendor, "done");
+        printVendorInProgress($vendor['name'], "done");
     }
     return ($shotList);
 }
@@ -79,27 +94,25 @@ function walkByScenes(array &$warnings): array
 function walkByVendorsScenes(array &$warnings): array
 {
     global $configData;
-    global $vaultNumDirs;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
-        $shotList[$vendor] = [];
+        $depth = countDirDepth($vendor['path']) + $configData['_vault_depth'] + 1;
+        $shotList[$vendor['name']] = [];
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor['path']);
 
-        $list = glob($vendorDir, GLOB_ONLYDIR);
-        if (count($list) == 0) {
-            $warnings[] = "<b>NO DATES</b> are found for <b>" .
-                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
+        $dateList = glob($vendorDir, GLOB_ONLYDIR);
+        if (count($dateList) == 0) {
+            $warnings[] = "<b>NO DATES</b> are found for <b>" . $vendor['name'] . "</b> (" . $vendor['path'] . ")";
             continue;
         }
 
-        foreach ($list as $datePath) {
-            collectByScene($datePath, $vendor, $shotList[$vendor], $offset);
+        foreach ($dateList as $date) {
+            collectByScene($date, $vendor['name'], $shotList[$vendor['name']], $depth);
         }
-        printVendorInProgress($vendor, "ok");
+        printVendorInProgress($vendor['name'], "ok");
     }
     return ($shotList);
 }
@@ -113,26 +126,24 @@ function walkByVendorsScenes(array &$warnings): array
 function walkByDates(array &$warnings): array
 {
     global $configData;
-    global $vaultNumDirs;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
+        $offset = countDirDepth($vendor['path']) + $configData['_vault_depth'] + 1;
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor['path']);
 
         $list = glob($vendorDir, GLOB_ONLYDIR);
         if (count($list) == 0) {
-            $warnings[] = "<b>NO DATES</b> are found for <b>" .
-                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
+            $warnings[] = "<b>NO DATES</b> are found for <b>" . $vendor['name'] . "</b> (" . $vendor['path'] . ")";
             continue;
         }
 
         foreach ($list as $datePath) {
-            collectByDate($datePath, $vendor, $shotList, $offset);
+            collectByDate($datePath, $vendor['name'], $shotList, $offset);
         }
-        printVendorInProgress($vendor, "done");
+        printVendorInProgress($vendor['name'], "done");
     }
     return ($shotList);
 }
@@ -146,27 +157,25 @@ function walkByDates(array &$warnings): array
 function walkByVendorsDates(array &$warnings): array
 {
     global $configData;
-    global $vaultNumDirs;
 
     $shotList = [];
 
     foreach ($configData['vendors'] as $vendor) {
-        $offset = countDirsOffset($vendor) + $vaultNumDirs + 1;
-        $shotList[$vendor] = [];
+        $offset = countDirDepth($vendor['path']) + $configData['_vault_depth'] + 1;
+        $shotList[$vendor['name']] = [];
         $vendorDir = $configData['vault'] . DIRECTORY_SEPARATOR
-            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor);
+            . str_replace(DATE_MATCH_MARK, DATE_MATCH_EXPR, $vendor['path']);
 
-        $list = glob($vendorDir, GLOB_ONLYDIR);
-        if (count($list) == 0) {
-            $warnings[] = "<b>NO DATES</b> are found for <b>" .
-                          explode("/", $vendor)[0] . "</b> (" . $vendor . ")";
+        $dateList = glob($vendorDir, GLOB_ONLYDIR);
+        if (count($dateList) == 0) {
+            $warnings[] = "<b>NO DATES</b> are found for <b>" . $vendor['name'] . "</b> (" . $vendor['path'] . ")";
             continue;
         }
 
-        foreach ($list as $datePath) {
-            collectByDate($datePath, $vendor, $shotList[$vendor], $offset);
+        foreach ($dateList as $datePath) {
+            collectByDate($datePath, $vendor['name'], $shotList[$vendor['name']], $offset);
         }
-        printVendorInProgress($vendor, "done");
+        printVendorInProgress($vendor['name'], "done");
     }
     return ($shotList);
 }
@@ -181,13 +190,13 @@ function walkByVendorsDates(array &$warnings): array
  * @param  mixed $offset
  * @return void
  */
-function collectByDate(mixed $datePath, string $vendor, array &$list, int $offset): void
+function collectByDate(mixed $datePath, string $vendor, array &$list, int $depth): void
 {
     global $configData;
 
     $reTypes = $configData['regexp'];
 
-    $date = getDateNthDir($datePath, $offset);
+    $date = getDirAtDepth($datePath, $depth);
 
     if (!isset($list[$date])) {
         $list[$date] = [];
@@ -238,13 +247,13 @@ function collectByDate(mixed $datePath, string $vendor, array &$list, int $offse
  * @param  mixed $offset
  * @return void
  */
-function collectByScene(string $datePath, string $vendor, array &$list, int $offset): void
+function collectByScene(string $datePath, string $vendor, array &$list, int $depth): void
 {
     global $configData;
 
     $reTypes = $configData['regexp'];
 
-    $date = getDateNthDir($datePath, $offset);
+    $date = getDirAtDepth($datePath, $depth);
 
     foreach (scandir($datePath) as $item) {
         if ($item[0] != "." && is_dir($datePath . DIRECTORY_SEPARATOR . $item)) {
@@ -358,24 +367,24 @@ function printDateList(array $datelist): string
 
 
 
-function countDirsOffset(string $path): int
+function countDirDepth(string $path): int
 {
-    $count = 0;
+    $depth = 0;
     $len = strlen($path);
     for ($i = 0; $i < $len; $i++) {
         if ($path[$i] == DATE_MATCH_MARK) {
             break;
         }
         if ($path[$i] == DIRECTORY_SEPARATOR) {
-            $count++;
+            $depth++;
         }
     }
-    return $count;
+    return $depth;
 }
 
 
 
-function getDateNthDir(string $path, int $nth): string
+function getDirAtDepth(string $path, int $depth): string
 {
     $len = strlen($path);
     $pos = 0;
@@ -383,7 +392,7 @@ function getDateNthDir(string $path, int $nth): string
     for ($i = 0; $i < $len; $i++) {
         if ($path[$i] == DIRECTORY_SEPARATOR) {
             $pos++;
-            if ($pos >= $nth) {
+            if ($pos >= $depth) {
                 break;
             }
         }
@@ -437,4 +446,22 @@ function truepath(string $path, ?bool $symlink = false, ?bool $relative = false)
     return $path;
 }
 
-?>
+
+function checkDupNames(array $vendors): mixed
+{
+    $names = [];
+    $pathes = [];
+
+    foreach ($vendors as $vendor) {
+        if (isset($names[$vendor['name']])) {
+            return $vendor;
+        }
+
+        if (isset($pathes[$vendor['path']])) {
+            return $vendor;
+        }
+        $names[$vendor['name']] = true;
+        $pathes[$vendor['path']] = true;
+    }
+    return null;
+}

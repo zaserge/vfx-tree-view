@@ -171,10 +171,11 @@ a:hover {
 }
 
 .warnings {
-  background-color: #fff6f1;;
+  background-color: #fff6f1;
   font-size: 0.8em;
 }
 
 .errors {
   color: red;
 }
+
