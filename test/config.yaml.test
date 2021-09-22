@@ -1,0 +1,34 @@
+---
+ title: BIG VFX list
+ version: 2
+ timezone: Europe/Moscow
+ vault: test/vault
+
+ vendors:
+  - path: BigUser/in/*/#*/EXR
+    name: The Big User
+  - path: UniUser/in/#
+  - path: User1/in/#
+  - path: User2/in/#
+  - path: Usr8/in/#
+  - path: Venabenko/in/#
+  - path: Vendor1/in/#
+  - path: Vendor2/in/hires/#
+  - path: Vendor3/in/#
+  - path: Venenia/in/#
+  - path: Venerge/in/#
+  - path: Vengan/in/#
+  - path: Venhwed/in/#
+  - path: Venlius/in/#
+  - path: Venolotarev/in/#
+  - path: Vensper/in/FROM_MACHINA-INFINITUM/#
+  - path: Venvanov/in/#
+  - path: Venx/in/#
+  - path: Xenox/in/#
+  - path: kitel/in/#
+
+ regexp:
+    - re: /^(?P<scene>[A-Z]{2,3})_(?P<index>\d{4})_?(?P<opt>\w+)?_V(?P<ver>\d{1,3})_?(?P<mod>\w+)?$/iu
+      type: valid
+    - re: /^(?P<scene>[A-Z]{3})_(?P<index>\d{4})(?:_(?P<rem>\w+))?$/iu
+      type: warn

@@ -29,6 +29,8 @@ const order = url.searchParams.get("order") ?? "scene";
 const httpRequest = new XMLHttpRequest();
 const listContainer = document.getElementById("getlist");
 
+httpRequest.open("GET", "getlist.php?order=" + order, true);
+
 httpRequest.onprogress = function (event) {
   const response = event.currentTarget.response;
   listContainer.innerHTML = response;
@@ -61,5 +63,4 @@ httpRequest.onload = function (event) {
   }
 };
 
-httpRequest.open("GET", "getlist.php?order=" + order, true);
 httpRequest.send(null);
